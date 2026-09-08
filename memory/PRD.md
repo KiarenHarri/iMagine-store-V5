@@ -305,3 +305,10 @@ Build a polished, responsive multi-page Imagine Store Apple reseller website. Pr
 - Verified: GET /api/auth/google → 307 to accounts.google.com with correct client_id/redirect_uri/scope/state. First browser click-through caught "Error 400: redirect_uri_mismatch" (preview URI not yet registered) → user added it → re-test landed on the real Google "Sign in" page. Token exchange + session creation can only be proven by the owner's real Google sign-in (PENDING user click-through).
 - Also done: .env.example + Caddyfile pre-filled with imaginestore.co.za.
 - SECURITY NOTE: client secret was shared in chat; user can rotate it anytime in Google Cloud Console (Credentials → client → reset secret) and update backend/.env.
+
+## Implemented (2026-09-08, update 48 — MongoDB Atlas production database ready)
+- User created free Atlas M0 cluster: imaginestore.k00lxzk.mongodb.net, DB user kiarenh666_db_user, appName iMagineStore. Network Access opened to 0.0.0.0/0 after first connection test showed TLS handshake block (Atlas IP allowlist).
+- Verified from preview pod: ping ok, cluster reachable, credentials valid. Connection string (with password) is in the owner's notes/chat only — deliberately NOT written to .env.example, README, or any git-committed file.
+- Deploy day: MONGO_URL=<that string> + DB_NAME=imagine_store go into backend/.env on the xneelo server; the app auto-creates the database/indexes on first run. Preview stays on local MongoDB (protected env, existing test data) — do NOT repoint it.
+- Cluster also contains sample_mflix (Atlas sample data) — harmless, can be deleted in Atlas UI.
+- Master plan progress: Phase 1-2 done (Google OAuth live in preview), Phase 3 done (Atlas), remaining: Phase 4 Resend, Phase 5 Save-to-Github, Phase 6 xneelo server (s-g-1cpu-2gb + 25GB premium volume, quoted to user ~R148/mo), Phase 7 deploy, Phase 8 go-live tests.
