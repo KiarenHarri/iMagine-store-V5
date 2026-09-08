@@ -297,3 +297,11 @@ Build a polished, responsive multi-page Imagine Store Apple reseller website. Pr
 - README gained full "Put it live on the internet (xneelo Cloud)" guide: Atlas M0 setup (5 steps), server setup (Docker install → git clone → configure .env + Caddyfile → `docker compose up -d --build`), everyday commands table, manual no-Docker alternative, deployment file map.
 - Caveats documented: login cookies are secure=True → site needs HTTPS (Caddy auto-provisions once DNS points at the server); Resend + Google OAuth still need the user's own keys.
 - NOT tested: actual `docker compose` run (Docker unavailable in this preview environment) — Dockerfiles/compose validated by syntax check + equivalent native build test only.
+
+
+## Implemented (2026-09-08, update 47 — Google OAuth live in preview with real keys)
+- User created their own Google Cloud project "iMagine Store", PUBLISHED the OAuth consent screen (In production, basic scopes → no Google review, no customer warning screen), and created a Web OAuth client. Registered redirect URIs: imaginestore.co.za callback (launch) + preview callback.
+- Keys wired into /app/backend/.env (GOOGLE_CLIENT_ID/SECRET/REDIRECT_URI → preview callback), backend restarted.
+- Verified: GET /api/auth/google → 307 to accounts.google.com with correct client_id/redirect_uri/scope/state. First browser click-through caught "Error 400: redirect_uri_mismatch" (preview URI not yet registered) → user added it → re-test landed on the real Google "Sign in" page. Token exchange + session creation can only be proven by the owner's real Google sign-in (PENDING user click-through).
+- Also done: .env.example + Caddyfile pre-filled with imaginestore.co.za.
+- SECURITY NOTE: client secret was shared in chat; user can rotate it anytime in Google Cloud Console (Credentials → client → reset secret) and update backend/.env.
