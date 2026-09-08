@@ -180,6 +180,28 @@ async def send_password_reset(to_email: str, name: str, link: str) -> None:
         logger.exception("Password reset email failed")
 
 
+async def send_welcome(to_email: str, name: str) -> None:
+    first = escape((name or "").split(" ")[0] or "there")
+    subject = f"Welcome to {EMAIL_FROM_NAME}"
+    site = os.environ.get("FRONTEND_URL", "").rstrip("/")
+    cta = (
+        f'<p style="margin:26px 0"><a href="{escape(site)}/shop" style="background:#FF7A00;color:#FFFFFF;padding:13px 30px;'
+        'border-radius:999px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block">Browse the range</a></p>'
+        if site else ""
+    )
+    body = (
+        f'<p style="font-size:14px;color:#1D1D1F;line-height:1.6">Hi {first}, welcome to '
+        f"{escape(EMAIL_FROM_NAME)} — your account is ready.</p>"
+        '<p style="font-size:14px;color:#1D1D1F;line-height:1.6">With your account you can request product quotes, '
+        "book repairs, and track every request from one place.</p>"
+        + cta
+    )
+    try:
+        await send_email(to=to_email, subject=subject, html=_shell(subject, body))
+    except Exception:
+        logger.exception("Welcome email failed")
+
+
 async def notify_status(to_email: str, name: str, reference: str, status: str, price: str | None = None, note: str | None = None) -> None:
     first = escape((name or "").split(" ")[0] or "there")
     subject = f"Update on your request — {reference}"

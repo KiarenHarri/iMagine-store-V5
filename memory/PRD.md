@@ -312,3 +312,9 @@ Build a polished, responsive multi-page Imagine Store Apple reseller website. Pr
 - Deploy day: MONGO_URL=<that string> + DB_NAME=imagine_store go into backend/.env on the xneelo server; the app auto-creates the database/indexes on first run. Preview stays on local MongoDB (protected env, existing test data) — do NOT repoint it.
 - Cluster also contains sample_mflix (Atlas sample data) — harmless, can be deleted in Atlas UI.
 - Master plan progress: Phase 1-2 done (Google OAuth live in preview), Phase 3 done (Atlas), remaining: Phase 4 Resend, Phase 5 Save-to-Github, Phase 6 xneelo server (s-g-1cpu-2gb + 25GB premium volume, quoted to user ~R148/mo), Phase 7 deploy, Phase 8 go-live tests.
+
+## Implemented (2026-09-08, update 49 — Welcome email on account creation)
+- New mailer function send_welcome(to_email, name): branded shell (same style as other emails), greeting, "what your account does" line, optional "Browse the range" CTA button to FRONTEND_URL/shop (absolute https, passes the _assert_safe_email scanner). Errors swallowed like all other notify functions — can never break sign-up.
+- Fired via asyncio.create_task in BOTH account-creation paths in auth.py: POST /api/auth/register (after insert) and Google OAuth callback (only for first-time/new users, inside the if-not-user branch — returning users don't get re-welcomed).
+- Verified: register → HTTP 200 + log shows "Welcome email failed: RuntimeError Email is not configured" (template passed scanner, failed only at missing RESEND_API_KEY — expected in preview); duplicate register → 400 before email line; test user+session cleaned from Mongo.
+- Email will actually send once Phase 4 (Resend key) is done — no further code needed.

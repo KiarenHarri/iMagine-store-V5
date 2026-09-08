@@ -14,7 +14,7 @@ from fastapi import APIRouter, HTTPException, Request, Response
 from fastapi.responses import RedirectResponse
 
 from database import db, is_admin_email
-from mailer import send_password_reset
+from mailer import send_password_reset, send_welcome
 from models import ForgotIn, LoginIn, RegisterIn, ResetIn
 from utils import now_iso
 
@@ -204,6 +204,7 @@ async def google_callback(request: Request):
             "created_at": now_iso(),
         }
         await db.users.insert_one({**user})
+        asyncio.create_task(send_welcome(email, user["name"]))
     else:
         await db.users.update_one(
             {"email": email},
@@ -254,6 +255,7 @@ async def register(payload: RegisterIn, response: Response):
     }
     await db.users.insert_one({**user})
     user.pop("password_hash", None)
+    asyncio.create_task(send_welcome(email, name))
     return await create_session_for(user, response)
 
 
