@@ -133,6 +133,31 @@ export function Nav() {
                   Get a Quote
                 </Link>
               </div>
+              <div className="mt-3 border-t border-black/5 pt-4">
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <Link to="/account" onClick={() => setOpen(false)} data-testid="nav-mobile-account-link" className="flex flex-1 items-center gap-2.5 rounded-2xl border border-ink/10 px-3 py-2.5 transition-colors duration-200 hover:border-brand">
+                      {user.picture ? (
+                        <img src={user.picture} alt={user.name} className="h-8 w-8 rounded-full object-cover" />
+                      ) : (
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand text-xs font-bold text-white">
+                          {(user.name || "U")[0]}
+                        </span>
+                      )}
+                      <span className="text-sm font-semibold text-ink">{user.name?.split(" ")[0]} — My account</span>
+                    </Link>
+                    {user.is_admin && (
+                      <Link to="/admin" onClick={() => setOpen(false)} data-testid="nav-mobile-team-link" className="rounded-2xl border border-brand/40 bg-brand-subtle px-4 py-2.5 text-xs font-bold uppercase tracking-widest text-brand transition-colors duration-200 hover:bg-brand hover:text-white">
+                        Team
+                      </Link>
+                    )}
+                  </div>
+                ) : (
+                  <Link to="/account" onClick={() => setOpen(false)} data-testid="nav-mobile-signin-link" className="block rounded-full border border-ink/15 px-4 py-3 text-center text-sm font-semibold text-ink transition-colors duration-200 hover:border-brand hover:text-brand">
+                    Sign in or create an account
+                  </Link>
+                )}
+              </div>
             </div>
           </motion.nav>
         )}
