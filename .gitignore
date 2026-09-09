@@ -84,6 +84,12 @@ android-sdk/
 .env.*
 *.env
 !.env.example
+
+# Internal working files — not for the public repo
+memory/
+test_reports/
+tests/
+auth_testing.md
 credentials.json
 *.key
 .credentials
