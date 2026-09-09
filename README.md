@@ -19,10 +19,24 @@ xneelo's ordinary **web hosting plans cannot run this website** — they only su
 4. **Connect → Drivers** → copy the connection string, it looks like `mongodb+srv://user:<password>@cluster0.xxxxx.mongodb.net/...`
 5. Replace `<password>` with the real password — that whole string is your `MONGO_URL`
 
-### Step 2 — Install the website on the server (~10 minutes)
-SSH into the server from your computer (`ssh root@SERVER-IP` — the IP is in the xneelo dashboard), then:
+### Step 2 — Create the server (xneelo dashboard, ~10 minutes)
+
+In your xneelo Cloud project:
+
+1. **Compute → Key Pairs → + Create Key Pair** — name it (e.g. `imagine-key`), type SSH Key. The `.pem` file downloads automatically — keep it safe, it IS your login
+2. **Compute → Instances → Launch Instance** — name `imagine-web`, image **Ubuntu 24.04 LTS**, flavor **s-g-1cpu-2gb**, boot volume **25GB**, Networks: leave the default **Public** network selected, Key pair: the one just created → **Launch**
+3. **Network → Security Groups → default → Add Rule** ×3: Ingress TCP port **22**, port **80**, port **443**, each from `0.0.0.0/0` (without these the site is unreachable and HTTPS can't be created)
+4. **Compute → Instances** → copy your server's **public IP address**
+
+### Step 3 — Install the website (~10 minutes)
+
+From your computer (Mac: Terminal · Windows: PowerShell):
 
 ```bash
+# Log in (Mac/Linux first: chmod 400 /path/to/imagine-key.pem)
+ssh -i /path/to/imagine-key.pem ubuntu@SERVER-IP
+sudo -i
+
 # 1. Install Docker
 curl -fsSL https://get.docker.com | sh
 
@@ -32,8 +46,8 @@ cd imagine-store
 
 # 3. Configure it
 cp backend/.env.example backend/.env
-nano backend/.env     # paste your MONGO_URL from Atlas, set your domain, add email keys
-nano Caddyfile        # replace yourdomain.co.za with your real domain
+nano backend/.env     # paste MONGO_URL (Atlas), GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, RESEND_API_KEY
+nano Caddyfile        # only if NOT using imaginestore.co.za + www (already pre-filled)
 
 # 4. Start everything — frontend + backend + automatic free HTTPS
 docker compose up -d --build
