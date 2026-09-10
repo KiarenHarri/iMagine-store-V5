@@ -72,29 +72,31 @@ export const categories = [
 ];
 
 export const products = [
-  { id: "ip17promax", name: "iPhone 17 Pro Max", category: "iphone", tagline: "Cosmic Orange. The biggest Pro ever.", image: IMAGES.iphone17promax, specs: ["A19 Pro", "Full-width camera plateau", "Best battery ever"] },
+  { id: "ip18promax", name: "iPhone 18 Pro Max", category: "iphone", tagline: "A20 Pro. The ultimate iPhone.", image: IMAGES.iphone17promax, specs: ["A20 Pro chip", "Variable aperture camera", "The biggest Pro display"] },
+  { id: "ip18pro", name: "iPhone 18 Pro", category: "iphone", tagline: "A20 Pro power, perfectly sized.", image: IMAGES.iphone17pro, specs: ["A20 Pro chip", "48MP Fusion cameras", "ProMotion 120Hz"] },
+  { id: "ip17promax", name: "iPhone 17 Pro Max", category: "iphone", tagline: "Cosmic Orange. Unibody design.", image: IMAGES.iphone17promax, specs: ["A19 Pro", "Full-width camera plateau", "Great battery life"] },
   { id: "ip17pro", name: "iPhone 17 Pro", category: "iphone", tagline: "Deep blue. Unibody aluminium.", image: IMAGES.iphone17pro, specs: ["A19 Pro", "48MP Fusion cameras", "Vapor chamber"] },
+  { id: "ipair", name: "iPhone Air", category: "iphone", tagline: "Impossibly thin. Unmistakably iPhone.", image: IMAGES.iphoneAlt, specs: ["Ultra-thin design", "Pro-level camera", "All-day battery"] },
   { id: "ip17", name: "iPhone 17", category: "iphone", tagline: "Lavender. ProMotion for everyone.", image: IMAGES.iphone17, specs: ["A19", "120Hz ProMotion", "Dual Fusion camera"] },
-  { id: "ip16pro", name: "iPhone 16 Pro", category: "iphone", tagline: "Titanium build. A18 Pro chip.", image: IMAGES.iphone16pro, specs: ["A18 Pro", "ProMotion 120Hz", "48MP Fusion camera"] },
   { id: "ip16", name: "iPhone 16", category: "iphone", tagline: "Camera Control. All-day battery.", image: IMAGES.iphoneBlue, specs: ["A18", "Camera Control", "USB-C"] },
-  { id: "ip15", name: "iPhone 15 Pro", category: "iphone", tagline: "Titanium. A17 Pro. Pro camera system.", image: IMAGES.iphone15pro, specs: ["A17 Pro", "48MP camera", "USB-C"] },
   { id: "ip-pre", name: "Pre-Owned iPhone", category: "iphone", tagline: "Certified pre-owned, graded & checked.", image: IMAGES.iphonePreOwned, specs: ["Quality graded", "Battery health checked", "Warranty options"] },
-  { id: "mbair", name: "MacBook Air", category: "mac", tagline: "Impossibly thin. Apple silicon.", image: IMAGES.macbookAirM4, specs: ["M-series chip", "Up to 18h battery", "Fanless design"] },
-  { id: "mbpro", name: "MacBook Pro", category: "mac", tagline: "For pro workflows, anywhere.", image: IMAGES.macbookAlt, specs: ["M Pro/Max chips", "Liquid Retina XDR", "Pro I/O"] },
-  { id: "imac", name: "iMac", category: "mac", tagline: "An all-in-one statement.", image: IMAGES.imacLineup, specs: ["24-inch 4.5K", "M-series chip", "Seven colours"] },
+  { id: "mbair", name: "MacBook Air", category: "mac", tagline: "Impossibly thin. Apple silicon.", image: IMAGES.macbookAirM4, specs: ["M4 chip", "13-inch or 15-inch", "Up to 18h battery"] },
+  { id: "mbpro", name: "MacBook Pro", category: "mac", tagline: "For pro workflows, anywhere.", image: IMAGES.macbookAlt, specs: ["M4, M4 Pro or M4 Max", "14-inch or 16-inch XDR", "Pro I/O"] },
+  { id: "imac", name: "iMac", category: "mac", tagline: "An all-in-one statement.", image: IMAGES.imacLineup, specs: ["24-inch 4.5K", "M4 chip", "Seven colours"] },
   { id: "macmini", name: "Mac mini", category: "mac", tagline: "Tiny footprint. Huge capability.", image: IMAGES.macMini, specs: ["M-series chip", "Compact design", "Gigabit Ethernet"] },
-  { id: "ipp", name: "iPad Pro", category: "ipad", tagline: "The ultimate iPad experience.", image: IMAGES.ipadPro, specs: ["M-series chip", "Ultra Retina XDR", "Apple Pencil Pro"] },
-  { id: "ipa", name: "iPad Air", category: "ipad", tagline: "Serious power, light carry.", image: IMAGES.ipadAir, specs: ["M-series chip", "Liquid Retina", "5G option"] },
-  { id: "ipd", name: "iPad", category: "ipad", tagline: "Lovable. Capable. Everyday essential.", image: IMAGES.ipad, specs: ["A-series chip", "10.9-inch display", "USB-C"] },
-  { id: "ipm", name: "iPad mini", category: "ipad", tagline: "Full iPad, pocket size.", image: IMAGES.ipadMini, specs: ["8.3-inch display", "Apple Pencil support", "All-day battery"] },
-  { id: "aws10", name: "Apple Watch Series 10", category: "watch", tagline: "Thinner. Brighter. Smarter.", image: IMAGES.watchS10, specs: ["Wide-angle OLED", "Health sensors", "watchOS"] },
-  { id: "awu2", name: "Apple Watch Ultra 2", category: "watch", tagline: "Built for the extremes.", image: IMAGES.watchUltra, specs: ["Titanium case", "36h battery", "Precision GPS"] },
+  { id: "macstudio", name: "Mac Studio", category: "mac", tagline: "A workstation in miniature.", image: IMAGES.macMini, specs: ["M5 Max or M5 Ultra", "Pro-grade I/O", "Whisper quiet"] },
+  { id: "ipp", name: "iPad Pro", category: "ipad", tagline: "The ultimate iPad experience.", image: IMAGES.ipadPro, specs: ["M5 chip", "Ultra Retina XDR", "Apple Pencil Pro"] },
+  { id: "ipa", name: "iPad Air", category: "ipad", tagline: "Serious power, light carry.", image: IMAGES.ipadAir, specs: ["M4 chip", "11-inch or 13-inch", "5G option"] },
+  { id: "ipd", name: "iPad", category: "ipad", tagline: "Lovable. Capable. Everyday essential.", image: IMAGES.ipad, specs: ["A16 chip", "11-inch display", "USB-C"] },
+  { id: "ipm", name: "iPad mini", category: "ipad", tagline: "Full iPad, pocket size.", image: IMAGES.ipadMini, specs: ["A17 Pro chip", "8.3-inch display", "Apple Pencil support"] },
+  { id: "aws12", name: "Apple Watch Series 12", category: "watch", tagline: "New Readiness app. Ambient sensing.", image: IMAGES.watchS10, specs: ["Readiness app", "Ambient sensing", "watchOS"] },
+  { id: "awu4", name: "Apple Watch Ultra 4", category: "watch", tagline: "Built for the extremes.", image: IMAGES.watchUltra, specs: ["Titanium case", "Multi-day battery", "Precision GPS"] },
   { id: "awse", name: "Apple Watch SE", category: "watch", tagline: "Essentials, beautifully done.", image: IMAGES.watchSE, specs: ["Retina display", "Sleep tracking", "Family Setup"] },
 ];
 
 export const accessories = [
-  { id: "app2", name: "AirPods Pro", tagline: "Active Noise Cancellation, redefined.", image: IMAGES.airpodsPro, group: "Audio" },
-  { id: "ap", name: "AirPods", tagline: "Effortless listening, all day.", image: IMAGES.earbuds, group: "Audio" },
+  { id: "app2", name: "AirPods Pro 3", tagline: "The world's best in-ear noise cancellation.", image: IMAGES.airpodsPro, group: "Audio" },
+  { id: "ap", name: "AirPods 5", tagline: "Effortless listening, all day.", image: IMAGES.earbuds, group: "Audio" },
   { id: "beats", name: "Beats Headphones", tagline: "Big sound, bold style.", image: IMAGES.headphonesDark, group: "Audio" },
   { id: "pencil", name: "Apple Pencil Pro", tagline: "Pixel-perfect precision.", image: IMAGES.ipadPencil, group: "iPad" },
   { id: "mk", name: "Magic Keyboard", tagline: "A floating cantilever design.", image: IMAGES.ipadPro, group: "iPad" },
@@ -130,10 +132,10 @@ export const CANCEL_STATUS = "Cancelled";
 
 export const TRADE_IN = {
   iPhone: [
-    { label: "iPhone 15 / 16 series", base: [9000, 14000] },
-    { label: "iPhone 13 / 14 series", base: [5000, 9000] },
-    { label: "iPhone 11 / 12 series", base: [2500, 5000] },
-    { label: "iPhone X or older", base: [800, 2500] },
+    { label: "iPhone 16 / 17 series", base: [10000, 16000] },
+    { label: "iPhone 14 / 15 series", base: [6000, 10000] },
+    { label: "iPhone 12 / 13 series", base: [3000, 6000] },
+    { label: "iPhone 11 or older", base: [800, 3000] },
   ],
   Mac: [
     { label: "Apple-silicon MacBook Pro", base: [9000, 16000] },
@@ -147,8 +149,8 @@ export const TRADE_IN = {
     { label: "Standard / older iPad", base: [1000, 3000] },
   ],
   "Apple Watch": [
-    { label: "Ultra / Series 9 – 10", base: [2500, 5000] },
-    { label: "Series 6 – 8 / SE", base: [1200, 2500] },
+    { label: "Ultra / Series 10 – 12", base: [2500, 5500] },
+    { label: "Series 6 – 9 / SE", base: [1200, 2500] },
     { label: "Series 5 or older", base: [400, 1200] },
   ],
 };
@@ -162,8 +164,11 @@ export const CONDITION_MULTIPLIERS = [
 
 const C = (name, hex) => ({ name, hex });
 
-// iPhone X through iPhone 17 Pro Max — model-specific colours and storage (per Apple specs).
+// iPhone X through iPhone 18 Pro Max — model-specific colours and storage (per Apple specs).
+// NOTE: iPhone 18 Pro colours are provisional (carried from 17 Pro) — confirm against Apple's spec page and adjust.
 export const IPHONE_MODELS = [
+  { name: "iPhone 18 Pro Max", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
+  { name: "iPhone 18 Pro", storage: ["256GB", "512GB", "1TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
   { name: "iPhone 17 Pro Max", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
   { name: "iPhone 17 Pro", storage: ["256GB", "512GB", "1TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
   { name: "iPhone Air", storage: ["256GB", "512GB", "1TB"], colors: [C("Sky Blue", "#A7C5E3"), C("Light Gold", "#E8DCC8"), C("Cloud White", "#F2F1EC"), C("Space Black", "#3B3B3D")] },

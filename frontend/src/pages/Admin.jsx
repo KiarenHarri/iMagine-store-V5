@@ -531,7 +531,8 @@ export function SalesPanel() {
     reader.onload = () => {
       const imgEl = new Image();
       imgEl.onload = () => {
-        const size = 500;
+        // Square centre-crop with a white stage — matches the catalogue cards
+        const size = 1080;
         const canvas = document.createElement("canvas");
         canvas.width = size;
         canvas.height = size;
@@ -539,8 +540,10 @@ export function SalesPanel() {
         const side = Math.min(imgEl.width, imgEl.height);
         const sx = (imgEl.width - side) / 2;
         const sy = (imgEl.height - side) / 2;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, size, size);
         ctx.drawImage(imgEl, sx, sy, side, side, 0, 0, size, size);
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.88);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
         setForm((f) => ({ ...f, image: dataUrl }));
         setPreview(dataUrl);
       };
