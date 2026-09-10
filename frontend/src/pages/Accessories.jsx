@@ -44,7 +44,7 @@ export default function Accessories() {
               className="group overflow-hidden rounded-3xl border border-black/5 bg-white transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/10"
             >
               <div className="relative overflow-hidden bg-white">
-                <img src={catImgs[`accessory:${a.id}`] || a.image} alt={a.name} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                <img src={catImgs[`accessory:${a.id}`] || a.image} alt={a.name} loading="lazy" className="aspect-square w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105" />
                 <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink backdrop-blur">{a.group}</span>
               </div>
               <div className="p-6">

@@ -134,7 +134,7 @@ export function ProductCard({ product, index = 0 }) {
           src={catImgs[`product:${product.id}`] || product.image}
           alt={product.name}
           loading="lazy"
-          className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="aspect-square w-full object-contain p-6 transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white backdrop-blur">
           Price on request
@@ -244,7 +244,7 @@ export function SaleStrip({ dark = false }) {
               >
                 {s.image && (
                   <div className="overflow-hidden bg-white">
-                    <img src={s.image} alt={s.name} className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                    <img src={s.image} alt={s.name} className="aspect-square w-full object-contain bg-white p-4 transition-transform duration-700 ease-out group-hover:scale-105" />
                   </div>
                 )}
                 <div className="flex flex-1 flex-col p-6">
