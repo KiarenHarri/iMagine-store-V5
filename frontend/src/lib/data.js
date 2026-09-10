@@ -61,6 +61,8 @@ export const APPLE_IMG = {
   adapter: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MQLN3_GEO_US?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=S2U3dXZMblpTV3M4NkpScHppNDVqK3QzSTJGOGg4UWF4UzJQNFpwa1BrUytpNFY0WVMxUVlnblJXSGt4T2pKc1lPWmZLL1BoWTdTZkt0SUlGYmZWZmc",
   airpodsmax: "https://www.apple.com/v/airpods-max/l/images/meta/airpods-max_overview__c2mz40a3bugm_og.png?202609031423",
   airpodsprocase: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eVVtLzE2Q0EySC9CZElXWmlJUStQNE1LWlMyVmEreEd6UVBWaXRHdkpLMWtkQmFNcVM4WVpKQThrRTVBS2pPMk9OcWQvRzhwTDdwUWJpcExEZHpzZVI",
+  ip18cam: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-18-pro-finish-select-burgundy-202609_AV2?wid=724&hei=540&fmt=jpeg&qlt=90&.v=ODB3TEdtbk8ybkd3clM3dWVML3VCVmtqbnQyNWMvcld5Yy9DTnQyVUlQYnd0N0MvN002Q2xTTTlsNDE2S0J6M2h2Q29kcWs4WTl5cjdvUC9sdGZWcmRlVUN5anBMYXArdTZxQXVZNFlaRkdjcy95dXRDa1NDUVdPVmlYeklhNXBmbW94YnYxc1YvNXZ4emJGL0IxNFp3",
+  ipduo: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-duo-finish-select-star-white-202609_AV2?wid=1448&hei=1080&fmt=jpeg&qlt=90&.v=L2FnUkNTRm43ZDRCREFsdzlaeThka1hsOUZkQmZFRkQ2eEh0dEM0bVFwWDQyMkp3ajFERU1EdEpnTkVrNzFmMHFJdkJPZTFIVklMRHF5Qjlvcy9ObW14YXJFQWFnVmkrMkUzQ3k2TDVtN0dZeVdXc0RpQ01aMHg0Q2tCOVExRGh1YmZQMXFXa2w0U3RUanhYSTV4Z29R",
 };
 
 
@@ -99,6 +101,9 @@ export const categories = [
 ];
 
 export const products = [
+  { id: "ip18promax", name: "iPhone 18 Pro Max", category: "iphone", tagline: "Burgundy. The ultimate iPhone, redefined.", image: "/assets/iphone-18-pro-max.webp", specs: ["A20 Pro chip", "48MP camera, variable aperture", "Biggest battery leap ever"] },
+  { id: "ip18pro", name: "iPhone 18 Pro", category: "iphone", tagline: "A20 Pro power. Creative control.", image: APPLE_IMG.ip18cam, specs: ["A20 Pro chip", "48MP Fusion camera", "Smaller Dynamic Island"] },
+  { id: "ipduo", name: "iPhone Duo", category: "iphone", tagline: "The first foldable iPhone.", image: APPLE_IMG.ipduo, specs: ["7.6-inch folding display", "A20 Pro chip", "Titanium design"] },
   { id: "ip17promax", name: "iPhone 17 Pro Max", category: "iphone", tagline: "Cosmic Orange. The ultimate iPhone.", image: APPLE_IMG.ip17pro, specs: ["A19 Pro chip", "Full-width camera plateau", "Best iPhone battery"] },
   { id: "ip17pro", name: "iPhone 17 Pro", category: "iphone", tagline: "Deep blue. Unibody aluminium.", image: APPLE_IMG.ip17pro, specs: ["A19 Pro chip", "48MP Pro Fusion cameras", "Vapor chamber"] },
   { id: "ipair", name: "iPhone Air", category: "iphone", tagline: "The thinnest iPhone ever.", image: APPLE_IMG.ipair, specs: ["Ultra-thin titanium", "48MP Fusion camera", "A19 Pro chip"] },
@@ -192,6 +197,9 @@ const C = (name, hex) => ({ name, hex });
 
 // iPhone X through iPhone 17 Pro Max — model-specific colours and storage (per Apple specs).
 export const IPHONE_MODELS = [
+  { name: "iPhone 18 Pro Max", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Burgundy", "#6E2A3B"), C("Glacier", "#DCE9EE"), C("Silver", "#E3E4E6"), C("Black", "#3C3C3D")] },
+  { name: "iPhone 18 Pro", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Burgundy", "#6E2A3B"), C("Glacier", "#DCE9EE"), C("Silver", "#E3E4E6"), C("Black", "#3C3C3D")] },
+  { name: "iPhone Duo", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Star White", "#F4F2EC"), C("Night Sky", "#2E3138")] },
   { name: "iPhone 17 Pro Max", storage: ["256GB", "512GB", "1TB", "2TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
   { name: "iPhone 17 Pro", storage: ["256GB", "512GB", "1TB"], colors: [C("Silver", "#E3E4E6"), C("Cosmic Orange", "#C75B1E"), C("Deep Blue", "#31435A")] },
   { name: "iPhone Air", storage: ["256GB", "512GB", "1TB"], colors: [C("Sky Blue", "#A7C5E3"), C("Light Gold", "#E8DCC8"), C("Cloud White", "#F2F1EC"), C("Space Black", "#3B3B3D")] },

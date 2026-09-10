@@ -169,7 +169,7 @@ export function Nav() {
 // ---- Footer ----
 export function Footer() {
   return (
-    <footer data-testid="site-footer" className="relative overflow-hidden bg-ink text-paper grain">
+    <footer data-testid="site-footer" className="relative overflow-hidden bg-black text-paper grain">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-16 lg:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
