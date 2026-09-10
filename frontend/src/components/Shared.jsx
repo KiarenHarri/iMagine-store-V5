@@ -120,18 +120,21 @@ export function PasswordChecklist({ password }) {
 }
 
 // ---- Product card ----
+import { useCatalogueImages } from "../lib/client";
+
 export function ProductCard({ product, index = 0 }) {
+  const catImgs = useCatalogueImages();
   return (
     <div
       data-testid={`product-card-${product.id}`}
-      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/5 bg-white transition-shadow duration-300 hover:shadow-xl hover:shadow-ink/10"
+      className="group flex h-full flex-col overflow-hidden rounded-3xl border border-black/5 bg-white transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/10"
     >
-      <div className="relative overflow-hidden bg-paper">
+      <div className="relative overflow-hidden bg-white">
         <img
-          src={product.image}
+          src={catImgs[`product:${product.id}`] || product.image}
           alt={product.name}
           loading="lazy"
-          className="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
         <span className="absolute left-4 top-4 rounded-full bg-ink/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-white backdrop-blur">
           Price on request
@@ -235,7 +238,7 @@ export function SaleStrip({ dark = false }) {
             <Reveal key={s.id} delay={i * 0.07}>
               <div
                 data-testid={`sale-card-${s.id}`}
-                className={`group flex h-full flex-col overflow-hidden rounded-3xl border transition-shadow duration-300 hover:shadow-xl ${
+                className={`group flex h-full flex-col overflow-hidden rounded-3xl border transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl ${
                   dark ? "border-white/10 bg-white/5 hover:shadow-black/40" : "border-black/5 bg-paper hover:shadow-ink/10"
                 }`}
               >

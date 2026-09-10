@@ -3,8 +3,10 @@ import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Marquee, MaskedLine, Reveal } from "../components/Shared";
 import { accessories } from "../lib/data";
+import { useCatalogueImages } from "../lib/client";
 
 export default function Accessories() {
+  const catImgs = useCatalogueImages();
   return (
     <div data-testid="accessories-page" className="bg-paper">
       <section className="relative overflow-hidden bg-white py-16 lg:py-24">
@@ -39,10 +41,10 @@ export default function Accessories() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.6, delay: (i % 4) * 0.06, ease: [0.16, 1, 0.3, 1] }}
-              className="group overflow-hidden rounded-3xl border border-black/5 bg-white transition-shadow duration-300 hover:shadow-xl hover:shadow-ink/10"
+              className="group overflow-hidden rounded-3xl border border-black/5 bg-white transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-ink/10"
             >
-              <div className="relative overflow-hidden">
-                <img src={a.image} alt={a.name} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+              <div className="relative overflow-hidden bg-white">
+                <img src={catImgs[`accessory:${a.id}`] || a.image} alt={a.name} loading="lazy" className="aspect-square w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                 <span className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink backdrop-blur">{a.group}</span>
               </div>
               <div className="p-6">

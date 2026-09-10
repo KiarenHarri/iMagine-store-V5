@@ -85,3 +85,9 @@ class SaleIn(BaseModel):
     image: str = ""
     starts_at: str = ""
     ends_at: str = ""
+
+
+
+class CatalogueImageIn(BaseModel):
+    slot: str
+    image: str

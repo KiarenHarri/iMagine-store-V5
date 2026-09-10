@@ -15,7 +15,7 @@ from auth import (
 )
 from database import ADMIN_EMAILS, STATUS_FLOWS, db
 from mailer import notify_customer, notify_status, notify_team
-from models import AdminEmailIn, ContactMessage, ProductQuote, RepairQuote, SaleIn, StatusUpdate
+from models import AdminEmailIn, CatalogueImageIn, ContactMessage, ProductQuote, RepairQuote, SaleIn, StatusUpdate
 from pdfgen import build_quote_pdf
 from utils import now_iso, ref_code, sale_window_query
 
@@ -385,6 +385,36 @@ async def delete_sale(sale_id: str, request: Request):
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Sale not found")
     return {"message": "Sale removed"}
+
+
+# ---- Catalogue images (admin-managed shop photos) ----
+
+@router.get("/catalogue-images")
+async def list_catalogue_images():
+    docs = await db.catalogue_images.find({}, {"_id": 0}).to_list(500)
+    return {d["slot"]: d["image"] for d in docs}
+
+
+@router.post("/admin/catalogue-images")
+async def upsert_catalogue_image(payload: CatalogueImageIn, request: Request):
+    user = await get_admin_user(request)
+    if not payload.slot.strip():
+        raise HTTPException(status_code=400, detail="Slot is required")
+    if not payload.image.startswith("data:image/") or len(payload.image) > 4_500_000:
+        raise HTTPException(status_code=400, detail="Image must be a photo under 3MB")
+    await db.catalogue_images.update_one(
+        {"slot": payload.slot},
+        {"$set": {"slot": payload.slot, "image": payload.image, "updated_by": user["email"], "updated_at": now_iso()}},
+        upsert=True,
+    )
+    return {"message": "Catalogue image updated"}
+
+
+@router.delete("/admin/catalogue-images/{slot}")
+async def delete_catalogue_image(slot: str, request: Request):
+    await get_admin_user(request)
+    await db.catalogue_images.delete_one({"slot": slot})
+    return {"message": "Default image restored"}
 
 
 @router.get("/admin/stats")

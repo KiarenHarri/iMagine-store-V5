@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ShieldAlert, RefreshCw, Wrench, PackageSearch, Mail, Trash2, TrendingUp, Tag, ImagePlus, Percent, Inbox, UserPlus, ShieldCheck } from "lucide-react";
-import { useAuth, startGoogleLogin } from "../lib/client";
+import { useAuth, startGoogleLogin, useCatalogueImages, refreshCatalogueImages, formatApiError } from "../lib/client";
 import { MaskedLine, PasswordChecklist, passwordValid, Reveal } from "../components/Shared";
-import { STATUS_FLOWS, CANCEL_STATUS } from "../lib/data";
+import { STATUS_FLOWS, CANCEL_STATUS, products, accessories } from "../lib/data";
 
 // ---- Admin page ----
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -15,6 +15,7 @@ const TABS = [
   { id: "repair", label: "Repairs" },
   { id: "contact", label: "Messages" },
   { id: "sales", label: "Sales" },
+  { id: "catalogue", label: "Catalogue" },
   { id: "team", label: "Team" },
 ];
 
@@ -160,6 +161,8 @@ export default function Admin() {
           <div className="mt-8"><TeamPanel /></div>
         ) : tab === "sales" ? (
           <div className="mt-8"><SalesPanel /></div>
+        ) : tab === "catalogue" ? (
+          <div className="mt-8"><CataloguePanel /></div>
         ) : data === null ? (
           <div className="mt-10 flex justify-center py-10"><div className="h-8 w-8 animate-spin rounded-full border-2 border-ink/10 border-t-brand" /></div>
         ) : (
@@ -655,6 +658,119 @@ export function SalesPanel() {
           <p data-testid="sales-empty" className="py-8 text-center text-sm text-mute">No sales live right now — create the first one above.</p>
         )}
       </div>
+    </div>
+  );
+}
+
+// ---- Catalogue panel (admin-managed shop photos) ----
+export function CataloguePanel() {
+  const catImgs = useCatalogueImages();
+  const [busy, setBusy] = useState("");
+
+  const upload = (slot, file) => {
+    if (!file) return;
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Image must be under 8MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const imgEl = new Image();
+      imgEl.onload = async () => {
+        // Auto-crop to a square so every photo fills its frame perfectly
+        const size = 1080;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        const side = Math.min(imgEl.width, imgEl.height);
+        const sx = (imgEl.width - side) / 2;
+        const sy = (imgEl.height - side) / 2;
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, size, size);
+        ctx.drawImage(imgEl, sx, sy, side, side, 0, 0, size, size);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+        setBusy(slot);
+        try {
+          const res = await fetch(`${API}/admin/catalogue-images`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ slot, image: dataUrl }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(formatApiError(data.detail));
+          await refreshCatalogueImages();
+          toast.success("Image updated — it's live on the site");
+        } catch (err) {
+          toast.error(err.message);
+        } finally {
+          setBusy("");
+        }
+      };
+      imgEl.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const reset = async (slot) => {
+    setBusy(slot);
+    try {
+      const res = await fetch(`${API}/admin/catalogue-images/${encodeURIComponent(slot)}`, { method: "DELETE", credentials: "include" });
+      if (!res.ok) throw new Error("Could not remove the image");
+      await refreshCatalogueImages();
+      toast.success("Custom image removed — original photo is back");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const renderSection = (title, items, prefix) => (
+    <div className="mt-8">
+      <h3 className="font-display text-lg font-bold text-ink">{title}</h3>
+      <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        {items.map((item) => {
+          const slot = `${prefix}:${item.id}`;
+          const custom = Boolean(catImgs[slot]);
+          return (
+            <div key={slot} data-testid={`catalogue-item-${item.id}`} className="rounded-2xl border border-black/5 bg-white p-4">
+              <div className="relative overflow-hidden rounded-xl bg-paper">
+                <img src={catImgs[slot] || item.image} alt={item.name} data-testid={`catalogue-img-${item.id}`} className="aspect-square w-full object-cover" />
+                {custom && (
+                  <span className="absolute left-2 top-2 rounded-full bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Custom</span>
+                )}
+              </div>
+              <p className="mt-3 truncate text-sm font-semibold text-ink">{item.name}</p>
+              <div className="mt-3 flex gap-2">
+                <label data-testid={`catalogue-replace-${item.id}`} className="flex-1 cursor-pointer rounded-full bg-ink px-3 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand">
+                  {busy === slot ? "Working…" : custom ? "Replace" : "Upload"}
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => { upload(slot, e.target.files?.[0]); e.target.value = ""; }} />
+                </label>
+                {custom && (
+                  <button data-testid={`catalogue-reset-${item.id}`} onClick={() => reset(slot)} disabled={busy === slot} className="rounded-full border border-ink/15 px-3 py-2 text-xs font-semibold text-ink/70 transition-colors duration-200 hover:border-brand hover:text-brand">
+                    Reset
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  return (
+    <div data-testid="catalogue-panel">
+      <div className="rounded-2xl border border-brand/20 bg-brand-subtle p-5">
+        <p className="flex items-center gap-2 text-sm font-bold text-ink"><ImagePlus size={16} className="text-brand" /> Catalogue photos</p>
+        <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
+          Upload a new photo for any device or accessory — it's auto-cropped square so it fills its frame perfectly, and it goes live on the site immediately. Reset brings the original photo back.
+        </p>
+      </div>
+      {renderSection("Devices", products, "product")}
+      {renderSection("Accessories", accessories, "accessory")}
     </div>
   );
 }

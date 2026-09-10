@@ -31,8 +31,8 @@ module.exports = {
         ring: 'hsl(var(--ring))',
       },
       fontFamily: {
-        display: ['Outfit', 'SF Pro Display', 'system-ui', 'sans-serif'],
-        body: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Avenir Next"', 'Avenir', 'Figtree', 'SF Pro Display', 'system-ui', 'sans-serif'],
+        body: ['"Avenir Next"', 'Avenir', 'Figtree', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'monospace'],
       },
       borderRadius: {

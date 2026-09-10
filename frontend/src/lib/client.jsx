@@ -65,3 +65,30 @@ export const passwordAuth = async (mode, payload) => {
 export const startGoogleLogin = () => {
   window.location.href = `${API}/auth/google`;
 };
+
+
+// ---- Catalogue images (admin-managed photo overrides) ----
+let catalogueCache = null;
+const catalogueSubs = new Set();
+const notifyCatalogue = () => catalogueSubs.forEach((fn) => fn(catalogueCache || {}));
+
+export const refreshCatalogueImages = async () => {
+  try {
+    const res = await fetch(`${API}/catalogue-images`);
+    catalogueCache = res.ok ? await res.json() : {};
+  } catch {
+    catalogueCache = catalogueCache || {};
+  }
+  notifyCatalogue();
+};
+
+export function useCatalogueImages() {
+  const [map, setMap] = useState(catalogueCache || {});
+  useEffect(() => {
+    const fn = (m) => setMap(m);
+    catalogueSubs.add(fn);
+    if (!catalogueCache) refreshCatalogueImages();
+    return () => catalogueSubs.delete(fn);
+  }, []);
+  return map;
+}
