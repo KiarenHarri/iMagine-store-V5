@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform, useMotionValue, useSpring } from "fram
 import { ArrowRight, ArrowUpRight, Wrench, BadgeCheck, MapPin, RotateCcw } from "lucide-react";
 import { ease, Marquee, MaskedLine, Reveal, SaleStrip } from "../components/Shared";
 import Phone3D from "../components/Phone3D";
-import { categories, chapters, IMAGES, MARQUEE_ITEMS, BRAND, APPLE_IMG } from "../lib/data";
+import { categories, chapters, IMAGES, MARQUEE_ITEMS, BRAND } from "../lib/data";
 
 function Hero() {
   const ref = useRef(null);
@@ -115,16 +115,6 @@ function Hero() {
               <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-mute">Now quoting</p>
               <p className="mt-1 font-display text-sm font-bold text-ink">iPhone, Mac, iPad &amp; Watch</p>
               <p className="mt-0.5 text-xs text-brand font-semibold">Price on request</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: -20, rotate: 6 }}
-              animate={{ opacity: 1, y: 0, rotate: 3 }}
-              transition={{ duration: 0.9, delay: 1.1, ease }}
-              className="absolute -right-2 top-2 w-36 rounded-2xl border border-white/40 bg-white/80 p-2.5 shadow-xl backdrop-blur-xl sm:-right-6 sm:w-44"
-              data-testid="hero-iphone17pro-card"
-            >
-              <img src={APPLE_IMG.family} alt="The iPhone 17 family — official Apple photography" loading="lazy" className="w-full rounded-xl bg-white object-contain" />
-              <p className="mt-1.5 text-center font-mono text-[9px] uppercase tracking-[0.22em] text-mute">iPhone 17 Pro family — in store</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: -20 }}
