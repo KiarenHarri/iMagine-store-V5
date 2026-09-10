@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
 import { motion } from "framer-motion";
 import { ProductCard, Reveal, SaleStrip } from "../components/Shared";
-import { products, categories } from "../lib/data";
+import { categories } from "../lib/data";
+import { useShopItems } from "../lib/client";
 
 const PILLS = [{ slug: "all", name: "All" }, ...categories.filter((c) => c.slug !== "accessories")];
 
 export default function Shop() {
   const [cat, setCat] = useState("all");
   const [q, setQ] = useState("");
+  const { products } = useShopItems();
 
   const list = useMemo(() => {
     return products.filter(
@@ -17,7 +19,7 @@ export default function Shop() {
         (cat === "all" || p.category === cat) &&
         (q.trim() === "" || p.name.toLowerCase().includes(q.toLowerCase()))
     );
-  }, [cat, q]);
+  }, [products, cat, q]);
 
   return (
     <div data-testid="shop-page" className="bg-paper">

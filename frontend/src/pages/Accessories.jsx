@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Marquee, MaskedLine, Reveal } from "../components/Shared";
-import { accessories } from "../lib/data";
-import { useCatalogueImages } from "../lib/client";
+import { useCatalogueImages, useShopItems } from "../lib/client";
 
 export default function Accessories() {
   const catImgs = useCatalogueImages();
+  const { accessories } = useShopItems();
   return (
     <div data-testid="accessories-page" className="bg-paper">
       <section className="relative overflow-hidden bg-white py-16 lg:py-24">

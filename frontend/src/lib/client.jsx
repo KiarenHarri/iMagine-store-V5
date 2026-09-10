@@ -1,4 +1,5 @@
 // CLIENT — API calls + auth session state for the whole frontend.
+import { products, accessories } from "./data";
 import axios from "axios";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
@@ -67,28 +68,48 @@ export const startGoogleLogin = () => {
 };
 
 
-// ---- Catalogue images (admin-managed photo overrides) ----
+// ---- Catalogue (admin-managed photos, custom items, hidden items) ----
+const EMPTY_CATALOGUE = { images: {}, items: [], hidden: [] };
 let catalogueCache = null;
 const catalogueSubs = new Set();
-const notifyCatalogue = () => catalogueSubs.forEach((fn) => fn(catalogueCache || {}));
+const notifyCatalogue = () => catalogueSubs.forEach((fn) => fn(catalogueCache || EMPTY_CATALOGUE));
 
 export const refreshCatalogueImages = async () => {
   try {
     const res = await fetch(`${API}/catalogue-images`);
-    catalogueCache = res.ok ? await res.json() : {};
+    catalogueCache = res.ok ? { ...EMPTY_CATALOGUE, ...(await res.json()) } : EMPTY_CATALOGUE;
   } catch {
-    catalogueCache = catalogueCache || {};
+    catalogueCache = catalogueCache || EMPTY_CATALOGUE;
   }
   notifyCatalogue();
 };
 
-export function useCatalogueImages() {
-  const [map, setMap] = useState(catalogueCache || {});
+export function useCatalogue() {
+  const [cat, setCat] = useState(catalogueCache || EMPTY_CATALOGUE);
   useEffect(() => {
-    const fn = (m) => setMap(m);
+    const fn = (c) => setCat(c);
     catalogueSubs.add(fn);
     if (!catalogueCache) refreshCatalogueImages();
     return () => catalogueSubs.delete(fn);
   }, []);
-  return map;
+  return cat;
+}
+
+export function useCatalogueImages() {
+  return useCatalogue().images;
+}
+
+// Shop lists: static data.js items minus admin-hidden, plus admin-added customs
+export function useShopItems() {
+  const cat = useCatalogue();
+  const customProducts = cat.items
+    .filter((i) => i.kind === "product")
+    .map((i) => ({ id: i.slot.replace("product:", ""), name: i.name, category: i.section || "iphone", tagline: i.tagline, image: i.image, specs: i.specs || [] }));
+  const customAccessories = cat.items
+    .filter((i) => i.kind === "accessory")
+    .map((i) => ({ id: i.slot.replace("accessory:", ""), name: i.name, tagline: i.tagline, group: i.section || "Extras", image: i.image }));
+  return {
+    products: [...products.filter((p) => !cat.hidden.includes(`product:${p.id}`)), ...customProducts],
+    accessories: [...accessories.filter((a) => !cat.hidden.includes(`accessory:${a.id}`)), ...customAccessories],
+  };
 }

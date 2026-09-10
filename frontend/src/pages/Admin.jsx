@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ShieldAlert, RefreshCw, Wrench, PackageSearch, Mail, Trash2, TrendingUp, Tag, ImagePlus, Percent, Inbox, UserPlus, ShieldCheck } from "lucide-react";
-import { useAuth, startGoogleLogin, useCatalogueImages, refreshCatalogueImages, formatApiError } from "../lib/client";
+import { useAuth, startGoogleLogin, useCatalogue, refreshCatalogueImages, formatApiError } from "../lib/client";
 import { MaskedLine, PasswordChecklist, passwordValid, Reveal } from "../components/Shared";
-import { STATUS_FLOWS, CANCEL_STATUS, products, accessories } from "../lib/data";
+import { STATUS_FLOWS, CANCEL_STATUS, products, accessories, categories } from "../lib/data";
 
 // ---- Admin page ----
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -665,55 +665,67 @@ export function SalesPanel() {
   );
 }
 
-// ---- Catalogue panel (admin-managed shop photos) ----
+// ---- Catalogue panel (admin-managed shop photos + items) ----
+const cropToSquare = (file, done) => {
+  if (!file) return;
+  if (file.size > 8 * 1024 * 1024) {
+    toast.error("Image must be under 8MB");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const imgEl = new Image();
+    imgEl.onload = () => {
+      // Square centre-crop with a white stage so every photo fills its frame perfectly
+      const size = 1080;
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      const side = Math.min(imgEl.width, imgEl.height);
+      const sx = (imgEl.width - side) / 2;
+      const sy = (imgEl.height - side) / 2;
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, size, size);
+      ctx.drawImage(imgEl, sx, sy, side, side, 0, 0, size, size);
+      done(canvas.toDataURL("image/jpeg", 0.85));
+    };
+    imgEl.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+};
+
 export function CataloguePanel() {
-  const catImgs = useCatalogueImages();
+  const cat = useCatalogue();
   const [busy, setBusy] = useState("");
+  const [showAdd, setShowAdd] = useState(false);
+  const [addForm, setAddForm] = useState({ kind: "product", name: "", tagline: "", section: "iphone", specs: "", image: "" });
+
+  const post = async (url, body) => {
+    const res = await fetch(`${API}${url}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(body),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(formatApiError(data.detail));
+    return data;
+  };
 
   const upload = (slot, file) => {
-    if (!file) return;
-    if (file.size > 8 * 1024 * 1024) {
-      toast.error("Image must be under 8MB");
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const imgEl = new Image();
-      imgEl.onload = async () => {
-        // Auto-crop to a square so every photo fills its frame perfectly
-        const size = 1080;
-        const canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext("2d");
-        const side = Math.min(imgEl.width, imgEl.height);
-        const sx = (imgEl.width - side) / 2;
-        const sy = (imgEl.height - side) / 2;
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, size, size);
-        ctx.drawImage(imgEl, sx, sy, side, side, 0, 0, size, size);
-        const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
-        setBusy(slot);
-        try {
-          const res = await fetch(`${API}/admin/catalogue-images`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ slot, image: dataUrl }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) throw new Error(formatApiError(data.detail));
-          await refreshCatalogueImages();
-          toast.success("Image updated — it's live on the site");
-        } catch (err) {
-          toast.error(err.message);
-        } finally {
-          setBusy("");
-        }
-      };
-      imgEl.src = reader.result;
-    };
-    reader.readAsDataURL(file);
+    cropToSquare(file, async (dataUrl) => {
+      setBusy(slot);
+      try {
+        await post("/admin/catalogue-images", { slot, image: dataUrl });
+        await refreshCatalogueImages();
+        toast.success("Image updated — it's live on the site");
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setBusy("");
+      }
+    });
   };
 
   const reset = async (slot) => {
@@ -730,50 +742,181 @@ export function CataloguePanel() {
     }
   };
 
-  const renderSection = (title, items, prefix) => (
-    <div className="mt-8">
-      <h3 className="font-display text-lg font-bold text-ink">{title}</h3>
-      <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {items.map((item) => {
-          const slot = `${prefix}:${item.id}`;
-          const custom = Boolean(catImgs[slot]);
-          return (
-            <div key={slot} data-testid={`catalogue-item-${item.id}`} className="rounded-2xl border border-black/5 bg-white p-4">
-              <div className="relative overflow-hidden rounded-xl bg-paper">
-                <img src={catImgs[slot] || item.image} alt={item.name} data-testid={`catalogue-img-${item.id}`} className="aspect-square w-full object-cover" />
-                {custom && (
-                  <span className="absolute left-2 top-2 rounded-full bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Custom</span>
-                )}
-              </div>
-              <p className="mt-3 truncate text-sm font-semibold text-ink">{item.name}</p>
-              <div className="mt-3 flex gap-2">
-                <label data-testid={`catalogue-replace-${item.id}`} className="flex-1 cursor-pointer rounded-full bg-ink px-3 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand">
-                  {busy === slot ? "Working…" : custom ? "Replace" : "Upload"}
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => { upload(slot, e.target.files?.[0]); e.target.value = ""; }} />
-                </label>
-                {custom && (
-                  <button data-testid={`catalogue-reset-${item.id}`} onClick={() => reset(slot)} disabled={busy === slot} className="rounded-full border border-ink/15 px-3 py-2 text-xs font-semibold text-ink/70 transition-colors duration-200 hover:border-brand hover:text-brand">
-                    Reset
-                  </button>
-                )}
-              </div>
-            </div>
-          );
-        })}
+  const removeItem = async (slot, isCustom) => {
+    setBusy(slot);
+    try {
+      const res = await fetch(`${API}/admin/catalogue-items/${encodeURIComponent(slot)}`, { method: "DELETE", credentials: "include" });
+      if (!res.ok) throw new Error("Could not remove the item");
+      await refreshCatalogueImages();
+      toast.success(isCustom ? "Item removed from the catalogue" : "Item hidden from the shop — restore it below");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const restoreItem = async (slot) => {
+    setBusy(slot);
+    try {
+      await post("/admin/catalogue-items/restore", { slot });
+      await refreshCatalogueImages();
+      toast.success("Item is visible in the shop again");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const addItem = async (e) => {
+    e.preventDefault();
+    if (!addForm.image) {
+      toast.error("Add a photo for the item first");
+      return;
+    }
+    setBusy("add");
+    try {
+      await post("/admin/catalogue-items", addForm);
+      await refreshCatalogueImages();
+      setAddForm({ kind: "product", name: "", tagline: "", section: "iphone", specs: "", image: "" });
+      setShowAdd(false);
+      toast.success("Item added — it's live in the shop");
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBusy("");
+    }
+  };
+
+  const renderItem = (item, prefix, isAdded = false) => {
+    const slot = `${prefix}:${item.id}`;
+    const hasCustomImage = Boolean(cat.images[slot]);
+    if (cat.hidden.includes(slot)) return null;
+    return (
+      <div key={slot} data-testid={`catalogue-item-${item.id}`} className="rounded-2xl border border-black/5 bg-white p-4">
+        <div className="relative overflow-hidden rounded-xl bg-paper">
+          <img src={cat.images[slot] || item.image} alt={item.name} data-testid={`catalogue-img-${item.id}`} className="aspect-square w-full object-contain p-3" />
+          {hasCustomImage && (
+            <span className="absolute left-2 top-2 rounded-full bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Custom</span>
+          )}
+          {isAdded && (
+            <span className="absolute right-2 top-2 rounded-full bg-ink px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Added by you</span>
+          )}
+        </div>
+        <p className="mt-3 truncate text-sm font-semibold text-ink">{item.name}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <label data-testid={`catalogue-replace-${item.id}`} className="flex-1 cursor-pointer rounded-full bg-ink px-3 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand">
+            {busy === slot ? "Working…" : hasCustomImage ? "Replace" : "Upload"}
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => { upload(slot, e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+          {hasCustomImage && (
+            <button data-testid={`catalogue-reset-${item.id}`} onClick={() => reset(slot)} disabled={busy === slot} className="rounded-full border border-ink/15 px-3 py-2 text-xs font-semibold text-ink/70 transition-colors duration-200 hover:border-brand hover:text-brand">
+              Reset
+            </button>
+          )}
+          <button data-testid={`catalogue-remove-${item.id}`} onClick={() => removeItem(slot, isAdded)} disabled={busy === slot} className="rounded-full border border-red-200 px-3 py-2 text-xs font-semibold text-red-500 transition-colors duration-200 hover:bg-red-50">
+            Remove
+          </button>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
+
+  const customProducts = cat.items.filter((i) => i.kind === "product").map((i) => ({ id: i.slot.replace("product:", ""), name: i.name, image: i.image }));
+  const customAccessories = cat.items.filter((i) => i.kind === "accessory").map((i) => ({ id: i.slot.replace("accessory:", ""), name: i.name, image: i.image }));
+  const hiddenItems = cat.hidden.map((slot) => {
+    const [prefix, id] = slot.split(":");
+    const found = (prefix === "product" ? products : accessories).find((x) => x.id === id);
+    return { slot, name: found ? found.name : id };
+  });
+  const sectionOptions = addForm.kind === "product"
+    ? categories.filter((c) => c.slug !== "accessories").map((c) => ({ value: c.slug, label: c.name }))
+    : ["Audio", "iPad", "iPhone", "Watch", "Essentials"].map((g) => ({ value: g, label: g }));
 
   return (
     <div data-testid="catalogue-panel">
       <div className="rounded-2xl border border-brand/20 bg-brand-subtle p-5">
-        <p className="flex items-center gap-2 text-sm font-bold text-ink"><ImagePlus size={16} className="text-brand" /> Catalogue photos</p>
+        <p className="flex items-center gap-2 text-sm font-bold text-ink"><ImagePlus size={16} className="text-brand" /> Catalogue photos &amp; items</p>
         <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
-          Upload a new photo for any device or accessory — it's auto-cropped square so it fills its frame perfectly, and it goes live on the site immediately. Reset brings the original photo back.
+          Upload a new photo for any item — it's auto-cropped square on a clean white stage and goes live immediately. Remove hides an item from the shop (restore anytime below), and use "Add item" for brand-new products or accessories.
         </p>
       </div>
-      {renderSection("Devices", products, "product")}
-      {renderSection("Accessories", accessories, "accessory")}
+
+      <div className="mt-5 rounded-2xl border border-ink/10 bg-white p-5">
+        <button data-testid="catalogue-add-toggle" onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-2 text-sm font-bold text-ink transition-colors hover:text-brand">
+          <ImagePlus size={16} className="text-brand" /> {showAdd ? "Close" : "Add a new item"}
+        </button>
+        {showAdd && (
+          <form onSubmit={addItem} data-testid="catalogue-add-form" className="mt-4 space-y-3">
+            <div className="flex gap-2">
+              {[["product", "Device"], ["accessory", "Accessory"]].map(([value, label]) => (
+                <button
+                  type="button"
+                  key={value}
+                  data-testid={`catalogue-add-kind-${value}`}
+                  onClick={() => setAddForm((f) => ({ ...f, kind: value, section: value === "product" ? "iphone" : "Audio" }))}
+                  className={`rounded-full px-4 py-2 text-xs font-bold transition-colors duration-200 ${addForm.kind === value ? "bg-ink text-white" : "border border-ink/15 text-ink/60 hover:border-brand"}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <input required value={addForm.name} onChange={(e) => setAddForm((f) => ({ ...f, name: e.target.value }))} data-testid="catalogue-add-name" placeholder="Item name (e.g. Apple Vision Pro)" className="rounded-xl border border-ink/15 px-4 py-2.5 text-sm outline-none transition-colors focus:border-brand" />
+              <input value={addForm.tagline} onChange={(e) => setAddForm((f) => ({ ...f, tagline: e.target.value }))} data-testid="catalogue-add-tagline" placeholder="Short tagline" className="rounded-xl border border-ink/15 px-4 py-2.5 text-sm outline-none transition-colors focus:border-brand" />
+              <select value={addForm.section} onChange={(e) => setAddForm((f) => ({ ...f, section: e.target.value }))} data-testid="catalogue-add-section" className="rounded-xl border border-ink/15 px-4 py-2.5 text-sm outline-none transition-colors focus:border-brand">
+                {sectionOptions.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+              </select>
+              {addForm.kind === "product" && (
+                <input value={addForm.specs} onChange={(e) => setAddForm((f) => ({ ...f, specs: e.target.value }))} data-testid="catalogue-add-specs" placeholder="Spec chips, comma separated (e.g. M4 chip, 13-inch)" className="rounded-xl border border-ink/15 px-4 py-2.5 text-sm outline-none transition-colors focus:border-brand" />
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              <label data-testid="catalogue-add-photo" className="cursor-pointer rounded-full border border-ink/15 px-4 py-2 text-xs font-semibold text-ink transition-colors duration-200 hover:border-brand hover:text-brand">
+                {addForm.image ? "Photo added ✓ — tap to change" : "Choose photo"}
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => cropToSquare(e.target.files?.[0], (dataUrl) => { setAddForm((f) => ({ ...f, image: dataUrl })); e.target.value = ""; })} />
+              </label>
+              {addForm.image && <img src={addForm.image} alt="New item preview" className="h-12 w-12 rounded-lg border border-black/5 object-contain" />}
+            </div>
+            <button type="submit" disabled={busy === "add"} data-testid="catalogue-add-submit" className="rounded-full bg-brand px-6 py-2.5 text-xs font-bold text-white transition-colors duration-200 hover:bg-brand-hover disabled:opacity-50">
+              {busy === "add" ? "Adding…" : "Add to catalogue"}
+            </button>
+          </form>
+        )}
+      </div>
+
+      <div className="mt-8">
+        <h3 className="font-display text-lg font-bold text-ink">Devices</h3>
+        <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {products.map((item) => renderItem(item, "product"))}
+          {customProducts.map((item) => renderItem(item, "product", true))}
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h3 className="font-display text-lg font-bold text-ink">Accessories</h3>
+        <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {accessories.map((item) => renderItem(item, "accessory"))}
+          {customAccessories.map((item) => renderItem(item, "accessory", true))}
+        </div>
+      </div>
+
+      {hiddenItems.length > 0 && (
+        <div className="mt-8" data-testid="catalogue-hidden-section">
+          <h3 className="font-display text-lg font-bold text-ink">Hidden from shop</h3>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {hiddenItems.map((h) => (
+              <span key={h.slot} className="flex items-center gap-2 rounded-full border border-ink/15 bg-white px-4 py-2 text-xs font-semibold text-ink/70">
+                {h.name}
+                <button data-testid={`catalogue-restore-${h.slot.replace(":", "-")}`} onClick={() => restoreItem(h.slot)} disabled={busy === h.slot} className="font-bold text-brand hover:text-brand-hover">
+                  Restore
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -2,10 +2,12 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Marquee, MaskedLine, ProductCard, Reveal } from "../components/Shared";
-import { categories, products } from "../lib/data";
+import { categories } from "../lib/data";
+import { useShopItems } from "../lib/client";
 
 export default function Category() {
   const { slug } = useParams();
+  const { products } = useShopItems();
   const category = categories.find((c) => c.slug === slug && c.slug !== "accessories");
   if (!category) return <Navigate to="/shop" replace />;
 

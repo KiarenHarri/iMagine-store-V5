@@ -91,3 +91,16 @@ class SaleIn(BaseModel):
 class CatalogueImageIn(BaseModel):
     slot: str
     image: str
+
+
+class CatalogueItemIn(BaseModel):
+    kind: str
+    name: str
+    tagline: str = ""
+    section: str = ""
+    specs: str = ""
+    image: str
+
+
+class SlotIn(BaseModel):
+    slot: str

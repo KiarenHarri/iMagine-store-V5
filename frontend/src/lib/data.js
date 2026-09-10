@@ -7,7 +7,6 @@ export const IMAGES = {
   iphone17: img("photo-1758467700578-7491a5c7eedd"),
   iphone16pro: img("photo-1727093493864-0bcbd16c7e6d"),
   iphone15pro: img("photo-1773414422103-7aa2623de1fa"),
-  iphonePreOwned: img("photo-1663408261842-016bae520a0c"),
   storefront: "https://images.unsplash.com/photo-1621768216002-5ac171876625?crop=entropy&cs=srgb&fm=jpg&q=85&w=1600",
   macbookAirM4: img("photo-1767097587570-206837933fe0"),
   macbook: img("photo-1611186871348-b1ce696e52c9"),
@@ -38,7 +37,7 @@ export const IMAGES = {
 };
 
 // Official Apple product imagery (apple.com marketing pages + store CDN)
-const APPLE_IMG = {
+export const APPLE_IMG = {
   ip17pro: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-compare-iphone-17-pro-202509?wid=400&hei=512&fmt=png-alpha&.v=M0dlUVBobHVpY1h1dmlaR3RZekpEMi9sbCsxVVJmYjNiS29STjQrZEV5NnNlL1VpWDFHcHBMQXVUWWdWdkZZNGJPbDJJWDFrVGJEYlIxTitTcHhVWldNTk4rSDJkMy8vL20va2hrM1NheXZ4VldteDRHenNWeThpV3EzUWVVd2o",
   ipair: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-compare-iphone-air-202509?wid=400&hei=512&fmt=png-alpha&.v=M0dlUVBobHVpY1h1dmlaR3RZekpEMGtrRFZUNExaR0FUNGxJZXJuT2lqUjE5VXk1QVF5NWxrMFlTNWNpV2huNVM0TjRWdzF2UjRGVEY0c3dBQVZ6VGUza2N1YW5ubjVFaHZuNzNKcFIzTnc",
   ip17: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/iphone-compare-iphone-17-202509?wid=400&hei=512&fmt=png-alpha&.v=M0dlUVBobHVpY1h1dmlaR3RZekpENGh0eTVTNkN2NWpWZVAwbzMwQlBCTkxxZU5scXpES1hnUm96ckN1R2pZN215d1FhSDJ0bkR0ZGZtUjZJNmFveFo2eWNJSlJFRDM1UWQ2eUozZ1l5ZDA",
@@ -57,6 +56,14 @@ const APPLE_IMG = {
   watchse: "https://www.apple.com/v/apple-watch-se-3/c/images/meta/apple-watch-se-3__d0wwc67lzg02_og.png",
   airpodspro: "https://www.apple.com/v/airpods-pro/t/images/meta/og__c0ceegchesom_overview.png",
   airpods: "https://www.apple.com/v/airpods-5/a/images/meta/airpods-5__bwo9ith0md42_og.png",
+  pencil: "https://www.apple.com/v/apple-pencil/ag/images/meta/apple-pencil__e54ff7ft4f0i_og.png?202604221757",
+  magsafe: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MGD74?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=cHA4NjZqTnhYNU12bDVIaFFHNUxnemV5anh5cFo1c1prUGQ5ZHBXUzY4MHhwd2F1dWM5TE1maUVxSVV1anZjQXdYczhRdkV0elVtZUJkWHRSQU9iaHc",
+  keyboard: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MWR43?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=TngzbFF5WEZyeHUyWktjQnpsSDVHVGV5anh5cFo1c1prUGQ5ZHBXUzY4MFpzK2NwN0lUNk9teEkzbHhVNjBDZXZBeUk0YmE4VGpDMGQ0WHRWcmdyQ3c",
+  band: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MFLP4ref?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=SWgvU3lCM09FZGtacTNUMDdKWFdiTm5rekZRdnR3OCtwTXduV0hjcEhaU0NXVjk0TzYwS3Q2V3VwaTE1bnFMYW5KZU1CTUFibDFiTjZ2VVJhMjBpUmc",
+  adapter: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/MQLN3_GEO_US?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=S2U3dXZMblpTV3M4NkpScHppNDVqK3QzSTJGOGg4UWF4UzJQNFpwa1BrUytpNFY0WVMxUVlnblJXSGt4T2pKc1lPWmZLL1BoWTdTZkt0SUlGYmZWZmc",
+  airpodsmax: "https://www.apple.com/v/airpods-max/l/images/meta/airpods-max_overview__c2mz40a3bugm_og.png?202609031423",
+  airpodsprocase: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=1200&hei=1200&fmt=jpeg&qlt=90&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eVVtLzE2Q0EySC9CZElXWmlJUStQNE1LWlMyVmEreEd6UVBWaXRHdkpLMWtkQmFNcVM4WVpKQThrRTVBS2pPMk9OcWQvRzhwTDdwUWJpcExEZHpzZVI",
+  family: "https://www.apple.com/v/iphone/home/ck/images/meta/iphone__bh930eyjnj0i_og.png?202609091241",
 };
 
 
@@ -87,11 +94,11 @@ export const MARQUEE_ITEMS = [
 ];
 
 export const categories = [
-  { slug: "iphone", name: "iPhone", tagline: "Pro cameras. ProMotion. Pure power.", image: IMAGES.iphone16pro },
-  { slug: "mac", name: "Mac", tagline: "Apple silicon. Silent speed.", image: IMAGES.macbookAirM4 },
-  { slug: "ipad", name: "iPad", tagline: "A canvas that goes anywhere.", image: IMAGES.ipadPro },
-  { slug: "watch", name: "Watch", tagline: "Health, fitness and focus on your wrist.", image: IMAGES.watchS10 },
-  { slug: "accessories", name: "Accessories", tagline: "Finish the ecosystem.", image: IMAGES.airpodsPro },
+  { slug: "iphone", name: "iPhone", tagline: "Pro cameras. ProMotion. Pure power.", image: APPLE_IMG.ip17pro },
+  { slug: "mac", name: "Mac", tagline: "Apple silicon. Silent speed.", image: APPLE_IMG.mbair },
+  { slug: "ipad", name: "iPad", tagline: "A canvas that goes anywhere.", image: APPLE_IMG.ipad11 },
+  { slug: "watch", name: "Watch", tagline: "Health, fitness and focus on your wrist.", image: APPLE_IMG.watch },
+  { slug: "accessories", name: "Accessories", tagline: "Finish the ecosystem.", image: APPLE_IMG.airpodspro },
 ];
 
 export const products = [
@@ -101,7 +108,7 @@ export const products = [
   { id: "ip17", name: "iPhone 17", category: "iphone", tagline: "Lavender. ProMotion for everyone.", image: APPLE_IMG.ip17, specs: ["A19 chip", "120Hz ProMotion", "Dual Fusion camera"] },
   { id: "ip17e", name: "iPhone 17e", category: "iphone", tagline: "Feature stacked. Value packed.", image: APPLE_IMG.ip17e, specs: ["A19 chip", "48MP Fusion camera", "Great value"] },
   { id: "ip16", name: "iPhone 16", category: "iphone", tagline: "Camera Control. All-day battery.", image: APPLE_IMG.ip16, specs: ["A18", "Camera Control", "USB-C"] },
-  { id: "ip-pre", name: "Pre-Owned iPhone", category: "iphone", tagline: "Certified pre-owned, graded & checked.", image: IMAGES.iphonePreOwned, specs: ["Quality graded", "Battery health checked", "Warranty options"] },
+  { id: "ip-pre", name: "Pre-Owned iPhone", category: "iphone", tagline: "Certified pre-owned, graded & checked.", image: APPLE_IMG.ip16, specs: ["Quality graded", "Battery health checked", "Warranty options"] },
   { id: "mbair", name: "MacBook Air", category: "mac", tagline: "Impossibly thin. Apple silicon.", image: APPLE_IMG.mbair, specs: ["M4 chip", "13-inch or 15-inch", "Up to 18h battery"] },
   { id: "mbpro", name: "MacBook Pro", category: "mac", tagline: "For pro workflows, anywhere.", image: APPLE_IMG.mbpro, specs: ["M4 Pro, M4 Max or M5", "14-inch or 16-inch XDR", "Pro I/O"] },
   { id: "imac", name: "iMac", category: "mac", tagline: "An all-in-one statement.", image: APPLE_IMG.imac, specs: ["24-inch 4.5K", "M4 chip", "Seven colours"] },
@@ -117,14 +124,14 @@ export const products = [
 ];
 
 export const accessories = [
-  { id: "app2", name: "AirPods Pro 3", tagline: "The world's best in-ear noise cancellation.", image: APPLE_IMG.airpodspro, group: "Audio" },
+  { id: "app2", name: "AirPods Pro 3", tagline: "The world's best in-ear noise cancellation.", image: APPLE_IMG.airpodsprocase, group: "Audio" },
   { id: "ap", name: "AirPods", tagline: "Effortless listening, all day.", image: APPLE_IMG.airpods, group: "Audio" },
-  { id: "beats", name: "Beats Headphones", tagline: "Big sound, bold style.", image: IMAGES.headphonesDark, group: "Audio" },
-  { id: "pencil", name: "Apple Pencil Pro", tagline: "Pixel-perfect precision.", image: IMAGES.ipadPencil, group: "iPad" },
-  { id: "mk", name: "Magic Keyboard", tagline: "A floating cantilever design.", image: IMAGES.ipadPro, group: "iPad" },
-  { id: "magsafe", name: "MagSafe Chargers & Cases", tagline: "Snap. Charge. Go.", image: IMAGES.iphoneBlue, group: "iPhone" },
-  { id: "straps", name: "Watch Straps", tagline: "Change your look in a click.", image: IMAGES.watchStudio, group: "Watch" },
-  { id: "cables", name: "Cables & Adapters", tagline: "Genuine connectivity.", image: IMAGES.desk, group: "Essentials" },
+  { id: "airpodsmax", name: "AirPods Max", tagline: "Over-ear, re-engineered sound.", image: APPLE_IMG.airpodsmax, group: "Audio" },
+  { id: "pencil", name: "Apple Pencil Pro", tagline: "Pixel-perfect precision.", image: APPLE_IMG.pencil, group: "iPad" },
+  { id: "mk", name: "Magic Keyboard", tagline: "A floating cantilever design.", image: APPLE_IMG.keyboard, group: "iPad" },
+  { id: "magsafe", name: "MagSafe Chargers & Cases", tagline: "Snap. Charge. Go.", image: APPLE_IMG.magsafe, group: "iPhone" },
+  { id: "straps", name: "Watch Straps", tagline: "Change your look in a click.", image: APPLE_IMG.band, group: "Watch" },
+  { id: "cables", name: "Cables & Adapters", tagline: "Genuine connectivity.", image: APPLE_IMG.adapter, group: "Essentials" },
 ];
 
 export const repairServices = [

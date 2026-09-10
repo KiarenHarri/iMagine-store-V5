@@ -15,7 +15,7 @@ from auth import (
 )
 from database import ADMIN_EMAILS, STATUS_FLOWS, db
 from mailer import notify_customer, notify_status, notify_team
-from models import AdminEmailIn, CatalogueImageIn, ContactMessage, ProductQuote, RepairQuote, SaleIn, StatusUpdate
+from models import AdminEmailIn, CatalogueImageIn, CatalogueItemIn, ContactMessage, ProductQuote, RepairQuote, SaleIn, SlotIn, StatusUpdate
 from pdfgen import build_quote_pdf
 from utils import now_iso, ref_code, sale_window_query
 
@@ -391,8 +391,10 @@ async def delete_sale(sale_id: str, request: Request):
 
 @router.get("/catalogue-images")
 async def list_catalogue_images():
-    docs = await db.catalogue_images.find({}, {"_id": 0}).to_list(500)
-    return {d["slot"]: d["image"] for d in docs}
+    images = {d["slot"]: d["image"] for d in await db.catalogue_images.find({}, {"_id": 0}).to_list(500)}
+    items = await db.catalogue_items.find({}, {"_id": 0}).to_list(200)
+    hidden = [d["slot"] for d in await db.catalogue_hidden.find({}, {"_id": 0}).to_list(500)]
+    return {"images": images, "items": items, "hidden": hidden}
 
 
 @router.post("/admin/catalogue-images")
@@ -415,6 +417,43 @@ async def delete_catalogue_image(slot: str, request: Request):
     await get_admin_user(request)
     await db.catalogue_images.delete_one({"slot": slot})
     return {"message": "Default image restored"}
+
+
+@router.post("/admin/catalogue-items")
+async def add_catalogue_item(payload: CatalogueItemIn, request: Request):
+    user = await get_admin_user(request)
+    if payload.kind not in ("product", "accessory"):
+        raise HTTPException(status_code=400, detail="Kind must be product or accessory")
+    if not payload.name.strip():
+        raise HTTPException(status_code=400, detail="Name is required")
+    if not payload.image.startswith("data:image/") or len(payload.image) > 4_500_000:
+        raise HTTPException(status_code=400, detail="Image must be a photo under 3MB")
+    slot = f"{payload.kind}:custom-{uuid.uuid4().hex[:8]}"
+    await db.catalogue_items.insert_one({
+        "slot": slot, "kind": payload.kind, "name": payload.name.strip(),
+        "tagline": payload.tagline.strip(), "section": payload.section.strip(),
+        "specs": [s.strip() for s in payload.specs.split(",") if s.strip()][:6],
+        "image": payload.image, "created_by": user["email"], "created_at": now_iso(),
+    })
+    return {"message": "Item added to the catalogue", "slot": slot}
+
+
+@router.delete("/admin/catalogue-items/{slot}")
+async def remove_catalogue_item(slot: str, request: Request):
+    await get_admin_user(request)
+    if ":custom-" in slot:
+        await db.catalogue_items.delete_one({"slot": slot})
+        await db.catalogue_images.delete_one({"slot": slot})
+        return {"message": "Item removed"}
+    await db.catalogue_hidden.update_one({"slot": slot}, {"$set": {"slot": slot, "hidden_at": now_iso()}}, upsert=True)
+    return {"message": "Item hidden from the shop"}
+
+
+@router.post("/admin/catalogue-items/restore")
+async def restore_catalogue_item(payload: SlotIn, request: Request):
+    await get_admin_user(request)
+    await db.catalogue_hidden.delete_one({"slot": payload.slot})
+    return {"message": "Item is visible again"}
 
 
 @router.get("/admin/stats")
