@@ -27,8 +27,6 @@ export const IMAGES = {
   iphoneBlue: img("photo-1616348436168-de43ad0db179"),
   airpods: img("photo-1600294037681-c80b4cb5b434"),
   airpodsPro: img("photo-1770292170233-5d9e235ec739"),
-  headphones: img("photo-1505740420928-5e560c06d30e"),
-  headphonesDark: img("photo-1583394838336-acd977736f90"),
   earbuds: img("photo-1590658268037-6bf12165a8df"),
   laptopDesk: img("photo-1496181133206-80ce9b88a853"),
   desk: img("photo-1541807084-5c52b6b3adef"),

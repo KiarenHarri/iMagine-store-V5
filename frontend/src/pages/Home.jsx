@@ -268,7 +268,7 @@ function RepairsBand() {
         <div className="lg:col-span-6">
           <Reveal delay={0.15}>
             <div className="relative overflow-hidden rounded-[2rem]">
-              <img src={IMAGES.headphones} alt="Device service and care" loading="lazy" className="aspect-[16/10] w-full object-cover" />
+              <img src="/assets/blueprint.webp" alt="iPhone Pro technical blueprint — every repair down to the millimetre" loading="lazy" className="aspect-[16/10] w-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-tr from-ink/50 to-transparent" />
               <div className="absolute bottom-5 left-5 right-5 flex flex-wrap gap-2">
                 {["Mac", "iPhone", "iPad", "Watch", "Beats"].map((d) => (
