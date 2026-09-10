@@ -115,7 +115,7 @@ export function About() {
           <Reveal>
             <p className="eyebrow">Find us</p>
             <p className="mt-2 flex items-center gap-2 font-display text-xl font-bold text-ink sm:text-2xl">
-              <MapPin size={20} className="text-brand" /> {BRAND.location}
+              <MapPin size={20} className="text-brand" /> {BRAND.address[0]}, {BRAND.address[1]}
             </p>
           </Reveal>
           <Reveal delay={0.1}>
@@ -177,7 +177,7 @@ export function Contact() {
                 <MapPin size={18} className="mt-0.5 shrink-0 text-brand" />
                 <div>
                   <p className="text-sm font-bold text-ink">Visit the store</p>
-                  <p className="mt-1 text-sm text-ink/60">{BRAND.location}</p>
+                  <p className="mt-1 text-sm text-ink/60">{BRAND.address.map((line) => <span key={line} className="block">{line}</span>)}</p>
                 </div>
               </div>
               <a href={`tel:${BRAND.phone.replace(/\s/g, "")}`} data-testid="contact-phone-link" className="flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-5 transition-colors duration-200 hover:border-brand">

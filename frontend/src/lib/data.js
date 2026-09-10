@@ -72,6 +72,12 @@ export const BRAND = {
   role: "Apple Reseller & Apple Service Centre",
   established: "2014",
   location: "Westville, Durban, KwaZulu-Natal, South Africa",
+  address: [
+    "University of KwaZulu-Natal — Westville Campus",
+    "Shop 16, Block C",
+    "Pitlochry Road, Westville",
+    "Durban, KwaZulu-Natal, 3630",
+  ],
   philosophy: "Educate. Innovate. Entertain.",
   facebook: "https://www.facebook.com/imaginestoreza/",
   website: "https://www.imaginestore.co.za",

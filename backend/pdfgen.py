@@ -24,7 +24,7 @@ def build_quote_pdf(doc: dict) -> bytes:
     c.drawString(20 * mm, h - 29 * mm, "OFFICIAL QUOTATION")
     c.setFillColorRGB(0.75, 0.75, 0.78)
     c.setFont("Helvetica", 9)
-    c.drawString(20 * mm, h - 35 * mm, "Apple Reseller & Apple Service Centre - Westville, Durban, South Africa")
+    c.drawString(20 * mm, h - 35 * mm, "Apple Reseller & Service Centre - UKZN Westville Campus, Pitlochry Road, Durban, 3630")
     c.setFillColorRGB(*ORANGE)
     c.setFont("Helvetica-Bold", 13)
     c.drawRightString(w - 20 * mm, h - 22 * mm, doc["reference"])
