@@ -12,7 +12,7 @@ const LINKS = [
   { to: "/shop", label: "Store" },
   { to: "/repairs", label: "Repairs" },
   { to: "/accessories", label: "Accessories" },
-  { to: "/other-services", label: "Other services" },
+  { to: "/other-services", label: "Microsoft" },
   { to: "/about", label: "About" },
   { to: "/contact", label: "Contact" },
 ];
@@ -209,7 +209,7 @@ export function Footer() {
             <p className="eyebrow !text-paper/40">Company</p>
             <ul className="mt-3 space-y-2 text-[13px] text-paper/70">
               <li><Link to="/about" data-testid="footer-link-about" className="transition-colors duration-200 hover:text-brand">About</Link></li>
-              <li><Link to="/other-services" data-testid="footer-link-other-services" className="transition-colors duration-200 hover:text-brand">Other services</Link></li>
+              <li><Link to="/other-services" data-testid="footer-link-other-services" className="transition-colors duration-200 hover:text-brand">Microsoft</Link></li>
               <li><Link to="/repairs" data-testid="footer-link-repairs" className="transition-colors duration-200 hover:text-brand">Repairs</Link></li>
               <li><Link to="/contact" data-testid="footer-link-contact" className="transition-colors duration-200 hover:text-brand">Contact</Link></li>
               <li><Link to="/quote/product" data-testid="footer-link-quote" className="transition-colors duration-200 hover:text-brand">Get a Quote</Link></li>
