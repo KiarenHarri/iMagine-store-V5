@@ -178,7 +178,7 @@ export function Footer() {
               <span className="font-display text-2xl font-extrabold tracking-tight">iMagine<span className="text-brand">.</span></span>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-paper/60">
-              {BRAND.legal} — {BRAND.role}. South African ICT company established {BRAND.established}. {BRAND.philosophy}
+              {BRAND.legal} — South African ICT company established {BRAND.established}. {BRAND.philosophy}
             </p>
             <a
               href={BRAND.facebook}
