@@ -171,8 +171,8 @@ export function Nav() {
 export function Footer() {
   return (
     <footer data-testid="site-footer" className="relative overflow-hidden bg-black text-paper grain">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-10 lg:py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-8 lg:py-10">
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="flex items-center gap-2.5">
               <img src="/assets/logo.png" alt="iMagine logo" className="h-10 w-10 rounded-full object-cover" />
@@ -230,13 +230,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 select-none overflow-hidden">
-          <p className="text-stroke-dark whitespace-nowrap font-display text-[10vw] md:text-[6vw] font-black leading-none tracking-tighter">
+        <div className="mt-6 select-none overflow-hidden">
+          <p className="text-stroke-dark whitespace-nowrap font-display text-[7vw] md:text-[4vw] font-black leading-none tracking-tighter">
             iMagine
           </p>
         </div>
 
-        <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-5 text-xs text-paper/40 sm:flex-row sm:items-center">
+        <div className="mt-5 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-4 text-xs text-paper/40 sm:flex-row sm:items-center">
           <p data-testid="footer-copyright">© {new Date().getFullYear()} {BRAND.legal}</p>
           <Link to="/quote/product" data-testid="footer-cta" className="group flex items-center gap-1 font-semibold uppercase tracking-widest text-paper/70 transition-colors hover:text-brand">
             Start a quote <ArrowUpRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
