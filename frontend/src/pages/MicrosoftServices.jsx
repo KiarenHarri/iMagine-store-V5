@@ -235,7 +235,7 @@ export default function MicrosoftServices() {
             <div className="absolute inset-0 flex flex-col justify-center p-7 sm:p-12">
               <p className="eyebrow !text-[#7FBA00]">Why iMagine</p>
               <p className="mt-3 max-w-md font-display text-xl font-extrabold leading-snug text-white sm:text-3xl">
-                One Westville team for your Apple and Microsoft worlds.
+                One team for your Apple and Microsoft solutions
               </p>
               <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
                 Devices, repairs, cloud and AI — a single local partner that keeps your whole stack running.
