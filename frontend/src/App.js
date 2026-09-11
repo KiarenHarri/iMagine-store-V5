@@ -18,6 +18,7 @@ const Account = lazy(() => import("@/pages/Account"));
 const Admin = lazy(() => import("@/pages/Admin"));
 const TradeIn = lazy(() => import("@/pages/TradeIn"));
 const ResetPassword = lazy(() => import("@/pages/Account").then((m) => ({ default: m.ResetPassword })));
+const MicrosoftServices = lazy(() => import("@/pages/MicrosoftServices"));
 
 const PageLoader = () => (
   <div className="flex min-h-[60vh] items-center justify-center bg-paper" data-testid="page-loader">
@@ -65,6 +66,7 @@ function AppRouter() {
           <Route path="/accessories" element={<Accessories />} />
           <Route path="/repairs" element={<Repairs />} />
           <Route path="/about" element={<About />} />
+          <Route path="/other-services" element={<MicrosoftServices />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/quote/product" element={<ProductQuote />} />
           <Route path="/quote/repair" element={<RepairQuote />} />

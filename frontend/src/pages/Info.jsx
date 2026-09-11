@@ -1,6 +1,6 @@
 // INFO PAGES — About (/about) and Contact (/contact).
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, CheckCircle2, Clock, Facebook, Mail, MapPin, Phone, Send } from "lucide-react";
 import { Marquee, MaskedLine, Reveal } from "../components/Shared";
@@ -134,7 +134,15 @@ const inputCls =
   "w-full rounded-2xl border border-ink/10 bg-paper px-5 py-3.5 text-sm outline-none transition-colors focus:border-brand";
 
 export function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
+  const [searchParams] = useSearchParams();
+  const service = searchParams.get("service");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: service ? `Other services enquiry — ${service}` : "",
+    message: service ? `Hi iMagine team, I'd like to enquire about ${service}.` : "",
+  });
   const [done, setDone] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -221,6 +229,11 @@ export function Contact() {
                 </div>
               ) : (
                 <form onSubmit={submit} data-testid="contact-form" className="rounded-3xl border border-black/5 bg-white p-7 lg:p-10">
+                  {service && (
+                    <p data-testid="contact-service-note" className="mb-5 inline-flex rounded-full bg-brand-subtle px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-brand">
+                      Other services enquiry · {service}
+                    </p>
+                  )}
                   <p className="eyebrow">Send a message</p>
                   <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <input data-testid="contact-name-input" required value={form.name} onChange={set("name")} placeholder="Full name *" className={inputCls} />
