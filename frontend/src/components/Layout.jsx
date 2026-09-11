@@ -171,7 +171,7 @@ export function Nav() {
 export function Footer() {
   return (
     <footer data-testid="site-footer" className="relative overflow-hidden bg-black text-paper grain">
-      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-8 lg:py-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12 py-7 lg:py-8">
         <div className="grid grid-cols-1 gap-7 md:grid-cols-12">
           <div className="md:col-span-5">
             <div className="flex items-center gap-2.5">
@@ -230,13 +230,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-6 select-none overflow-hidden">
-          <p className="text-stroke-dark whitespace-nowrap font-display text-[7vw] md:text-[4vw] font-black leading-none tracking-tighter">
+        <div className="mt-5 select-none overflow-hidden">
+          <p className="text-stroke-dark whitespace-nowrap font-display text-[18vw] md:text-[10vw] font-black leading-none tracking-tighter">
             iMagine
           </p>
         </div>
 
-        <div className="mt-5 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-4 text-xs text-paper/40 sm:flex-row sm:items-center">
+        <div className="mt-4 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-4 text-xs text-paper/40 sm:flex-row sm:items-center">
           <p data-testid="footer-copyright">© {new Date().getFullYear()} {BRAND.legal}</p>
           <Link to="/quote/product" data-testid="footer-cta" className="group flex items-center gap-1 font-semibold uppercase tracking-widest text-paper/70 transition-colors hover:text-brand">
             Start a quote <ArrowUpRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
