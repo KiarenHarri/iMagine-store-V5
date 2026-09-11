@@ -151,6 +151,9 @@ async def google_login():
     if not (GOOGLE_CLIENT_ID and GOOGLE_REDIRECT_URI):
         return RedirectResponse(f"{FRONTEND_URL}/account?auth_error=google-not-configured")
     state = secrets.token_urlsafe(16)
+    # Server-side state (Mongo, TTL 10 min) — works regardless of which host the user started on
+    # (www vs apex vs staging subdomain), unlike a host-only cookie.
+    await db.oauth_states.insert_one({"state": state, "created_at": datetime.now(timezone.utc)})
     params = urlencode({
         "client_id": GOOGLE_CLIENT_ID,
         "redirect_uri": GOOGLE_REDIRECT_URI,
@@ -159,14 +162,17 @@ async def google_login():
         "prompt": "select_account",
         "state": state,
     })
-    resp = RedirectResponse(f"https://accounts.google.com/o/oauth2/v2/auth?{params}")
-    resp.set_cookie("oauth_state", state, httponly=True, secure=True, samesite="lax", max_age=600, path="/")
-    return resp
+    return RedirectResponse(f"https://accounts.google.com/o/oauth2/v2/auth?{params}")
 
 
 @router.get("/auth/google/callback")
 async def google_callback(request: Request):
-    if request.query_params.get("state") != request.cookies.get("oauth_state"):
+    state = request.query_params.get("state", "")
+    doc = await db.oauth_states.find_one_and_delete({"state": state})
+    created = doc.get("created_at") if doc else None
+    if created is not None and created.tzinfo is None:
+        created = created.replace(tzinfo=timezone.utc)
+    if not doc or not created or datetime.now(timezone.utc) - created > timedelta(minutes=10):
         raise HTTPException(status_code=400, detail="Invalid sign-in state — please try again")
     code = request.query_params.get("code", "")
     token_res = await asyncio.to_thread(
@@ -228,7 +234,6 @@ async def google_callback(request: Request):
         path="/",
         max_age=7 * 24 * 3600,
     )
-    resp.delete_cookie("oauth_state", path="/")
     return resp
 
 

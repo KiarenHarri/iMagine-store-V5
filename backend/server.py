@@ -47,6 +47,10 @@ async def create_indexes():
         await db.password_reset_tokens.create_index("expires_at", expireAfterSeconds=0)
     except Exception:
         pass
+    try:
+        await db.oauth_states.create_index("created_at", expireAfterSeconds=600)
+    except Exception:
+        pass
 
 
 @app.on_event("shutdown")
