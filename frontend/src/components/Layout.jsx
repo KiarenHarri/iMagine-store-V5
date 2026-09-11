@@ -235,7 +235,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 flex flex-col items-start justify-between gap-4 border-t border-white/10 pt-6 text-xs text-paper/40 sm:flex-row sm:items-center">
-          <p data-testid="footer-copyright">© {new Date().getFullYear()} {BRAND.legal}. Apple Reseller concept site — prices & availability on request.</p>
+          <p data-testid="footer-copyright">© {new Date().getFullYear()} {BRAND.legal}. Prices & availability on request.</p>
           <Link to="/quote/product" data-testid="footer-cta" className="group flex items-center gap-1 font-semibold uppercase tracking-widest text-paper/70 transition-colors hover:text-brand">
             Start a quote <ArrowUpRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
