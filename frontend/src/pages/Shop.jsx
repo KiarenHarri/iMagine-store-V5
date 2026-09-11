@@ -27,7 +27,7 @@ export default function Shop() {
         <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-brand/15 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
           <Reveal>
-            <p className="eyebrow !text-brand">Shop</p>
+            <p data-testid="shop-eyebrow" className="font-display text-lg font-bold uppercase tracking-[0.25em] text-brand sm:text-xl">Store</p>
             <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
               The catalogue.
             </h1>

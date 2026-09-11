@@ -9,7 +9,7 @@ import { BRAND, categories } from "../lib/data";
 // ---- Navbar ----
 const LINKS = [
   { to: "/", label: "Home" },
-  { to: "/shop", label: "Shop" },
+  { to: "/shop", label: "Store" },
   { to: "/repairs", label: "Repairs" },
   { to: "/accessories", label: "Accessories" },
   { to: "/about", label: "About" },
@@ -192,7 +192,7 @@ export function Footer() {
           </div>
 
           <div className="md:col-span-3">
-            <p className="eyebrow !text-paper/40">Shop</p>
+            <p className="eyebrow !text-paper/40">Store</p>
             <ul className="mt-4 space-y-2.5">
               {categories.map((c) => (
                 <li key={c.slug}>
