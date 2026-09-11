@@ -68,16 +68,16 @@ export function About() {
         <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
             <Reveal>
-              <h2 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Who we are</h2>
+              <h2 className="font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">Why choose iMagine Store?</h2>
               <div className="mt-5 space-y-4 text-sm leading-relaxed text-ink/70 sm:text-base">
                 <p>
-                  iMagine represents Apple, Adobe, Promise and other leading educational brands. The iMagine Store serves as a dedicated Apple Reseller, giving customers access to the latest Apple products and technologies.
+                  As an Apple Reseller, iMagine Store offers an exclusive gateway to the world of Apple products, providing you with a seamless and unparalleled Apple experience. Whether you're a professional seeking productivity tools, an educator in search of innovative teaching solutions, or an individual looking to enhance your digital lifestyle, iMagine Store has you covered.
                 </p>
                 <p>
-                  Beyond retail, iMagine offers software development — a full range of application development and IT consultancy services — delivering end-to-end solutions for the creative, education and professional industries.
+                  At iMagine Store, we understand that technology is not just a tool, but an enabler of growth, productivity, and inspiration. By choosing iMagine Store, you gain access to our wealth of knowledge, personalized service, and a passion for empowering you with the transformative power of technology.
                 </p>
                 <p>
-                  Our passion for all things Apple doesn't stop at great products. As a leading KwaZulu-Natal Apple Service Provider, our certified service team handles everything from general maintenance to warranty and out-of-warranty repairs.
+                  Experience the iMagine Store difference and unlock endless possibilities for success in South Africa and beyond.
                 </p>
               </div>
             </Reveal>
@@ -97,9 +97,9 @@ export function About() {
             <Reveal delay={0.15}>
               <AboutParallax />
               <div className="mt-24 rounded-3xl bg-ink p-7 text-paper grain relative overflow-hidden">
-                <p className="eyebrow !text-brand">Why choose iMagine</p>
+                <p className="eyebrow !text-brand">The iMagine difference</p>
                 <p className="mt-3 text-sm leading-relaxed text-paper/70">
-                  An exclusive gateway to the world of Apple — a seamless experience for professionals, educators and anyone looking to enhance their digital lifestyle.
+                  Experience the iMagine Store difference and unlock endless possibilities for success in South Africa and beyond.
                 </p>
                 <Link to="/quote/product" data-testid="about-quote-cta" className="group mt-5 inline-flex items-center gap-2 rounded-full bg-brand px-6 py-3 text-sm font-semibold text-white transition-colors duration-300 hover:bg-brand-hover">
                   Start a quote <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
