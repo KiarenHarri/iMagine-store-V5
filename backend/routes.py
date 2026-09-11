@@ -15,7 +15,7 @@ from auth import (
 )
 from database import ADMIN_EMAILS, STATUS_FLOWS, db
 from mailer import notify_customer, notify_status, notify_team
-from models import AdminEmailIn, CatalogueImageIn, CatalogueItemIn, ContactMessage, ProductQuote, RepairQuote, SaleIn, SlotIn, StatusUpdate
+from models import AdminEmailIn, CatalogueImageIn, CatalogueItemIn, ContactMessage, HeroVideoIn, ProductQuote, RepairQuote, SaleIn, SlotIn, StatusUpdate
 from pdfgen import build_quote_pdf
 from utils import now_iso, ref_code, sale_window_query
 
@@ -454,6 +454,47 @@ async def restore_catalogue_item(payload: SlotIn, request: Request):
     await get_admin_user(request)
     await db.catalogue_hidden.delete_one({"slot": payload.slot})
     return {"message": "Item is visible again"}
+
+
+# ---- Hero video (admin-managed homepage video) ----
+
+@router.get("/hero-video")
+async def get_hero_video():
+    doc = await db.site_media.find_one({"key": "hero_video"}, {"_id": 0})
+    if not doc:
+        return {"video": None, "hidden": False}
+    return {"video": doc.get("video"), "hidden": bool(doc.get("hidden"))}
+
+
+@router.post("/admin/hero-video")
+async def upload_hero_video(payload: HeroVideoIn, request: Request):
+    user = await get_admin_user(request)
+    if not payload.video.startswith("data:video/") or len(payload.video) > 14_000_000:
+        raise HTTPException(status_code=400, detail="Video must be an MP4 under 10MB")
+    await db.site_media.update_one(
+        {"key": "hero_video"},
+        {"$set": {"key": "hero_video", "video": payload.video, "hidden": False, "updated_by": user["email"], "updated_at": now_iso()}},
+        upsert=True,
+    )
+    return {"message": "Hero video updated"}
+
+
+@router.delete("/admin/hero-video")
+async def remove_hero_video(request: Request):
+    user = await get_admin_user(request)
+    await db.site_media.update_one(
+        {"key": "hero_video"},
+        {"$set": {"key": "hero_video", "video": None, "hidden": True, "updated_by": user["email"], "updated_at": now_iso()}},
+        upsert=True,
+    )
+    return {"message": "Hero video removed from the homepage"}
+
+
+@router.post("/admin/hero-video/restore")
+async def restore_hero_video(request: Request):
+    await get_admin_user(request)
+    await db.site_media.delete_one({"key": "hero_video"})
+    return {"message": "Default hero video restored"}
 
 
 @router.get("/admin/stats")

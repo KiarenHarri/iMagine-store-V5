@@ -1,10 +1,57 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Wrench, BadgeCheck, MapPin, RotateCcw } from "lucide-react";
 import { ease, Marquee, MaskedLine, Reveal, SaleStrip } from "../components/Shared";
-import Phone3D from "../components/Phone3D";
+import { getHeroVideo } from "../lib/client";
 import { categories, chapters, IMAGES, MARQUEE_ITEMS, BRAND } from "../lib/data";
+
+// Hero video: plays ONCE when scrolled into view, then holds its final frame (no loop). Admin-managed.
+function HeroVideo() {
+  const videoRef = useRef(null);
+  const playedRef = useRef(false);
+  const [state, setState] = useState({ loading: true, video: null, hidden: false });
+
+  useEffect(() => {
+    getHeroVideo().then((d) => setState({ loading: false, video: d.video, hidden: Boolean(d.hidden) }));
+  }, []);
+
+  const src = state.hidden ? null : state.video || "/assets/hero-duo.mp4";
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v || !src) return;
+    playedRef.current = false; // allow autoplay again if the admin swaps the video mid-session
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !playedRef.current) {
+          playedRef.current = true;
+          v.play().catch(() => {});
+          io.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, [src, state.loading]);
+
+  if (state.loading) return <div className="aspect-[840/568] w-full" />;
+  if (!src) return null;
+  return (
+    <video
+      ref={videoRef}
+      data-testid="hero-video"
+      src={src}
+      muted
+      playsInline
+      preload="auto"
+      disablePictureInPicture
+      aria-hidden="true"
+      className="w-full object-contain"
+    />
+  );
+}
 
 function Hero() {
   const ref = useRef(null);
@@ -15,17 +62,6 @@ function Hero() {
   const ringY = useTransform(scrollYProgress, [0, 1], [0, -110]);
   const ringRot = useTransform(scrollYProgress, [0, 1], [0, 160]);
   const chipY = useTransform(scrollYProgress, [0, 1], [0, -70]);
-
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const rx = useSpring(useTransform(my, [-0.5, 0.5], [7, -7]), { stiffness: 120, damping: 16 });
-  const ry = useSpring(useTransform(mx, [-0.5, 0.5], [-9, 9]), { stiffness: 120, damping: 16 });
-
-  const onMove = (e) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    mx.set((e.clientX - r.left) / r.width - 0.5);
-    my.set((e.clientY - r.top) / r.height - 0.5);
-  };
 
   return (
     <section ref={ref} data-testid="hero-section" className="relative overflow-hidden bg-paper">
@@ -84,7 +120,7 @@ function Hero() {
           </motion.div>
         </div>
 
-        <div className="lg:col-span-5" onMouseMove={onMove} onMouseLeave={() => { mx.set(0); my.set(0); }}>
+        <div className="lg:col-span-5">
           <motion.div
             style={{ y: imgY, scale: sScale, transformStyle: "preserve-3d" }}
             className="relative will-change-transform"
@@ -104,7 +140,7 @@ function Hero() {
               transition={{ duration: 1.1, delay: 0.35, ease }}
               className="relative"
             >
-              <Phone3D progress={scrollYProgress} rx={rx} ry={ry} />
+              <HeroVideo />
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}

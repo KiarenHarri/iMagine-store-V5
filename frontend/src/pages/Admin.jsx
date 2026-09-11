@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ShieldAlert, RefreshCw, Wrench, PackageSearch, Mail, Trash2, TrendingUp, Tag, ImagePlus, Percent, Inbox, UserPlus, ShieldCheck } from "lucide-react";
-import { useAuth, startGoogleLogin, useCatalogue, refreshCatalogueImages, formatApiError } from "../lib/client";
+import { ShieldAlert, RefreshCw, Wrench, PackageSearch, Mail, Trash2, TrendingUp, Tag, ImagePlus, Percent, Inbox, UserPlus, ShieldCheck, Film } from "lucide-react";
+import { useAuth, startGoogleLogin, useCatalogue, refreshCatalogueImages, formatApiError, getHeroVideo } from "../lib/client";
 import { MaskedLine, PasswordChecklist, passwordValid, Reveal } from "../components/Shared";
 import { STATUS_FLOWS, CANCEL_STATUS, products, accessories, categories } from "../lib/data";
 
@@ -695,6 +695,103 @@ const cropToSquare = (file, done) => {
   reader.readAsDataURL(file);
 };
 
+export function HeroVideoPanel() {
+  const [state, setState] = useState({ loading: true, video: null, hidden: false });
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => setState({ loading: false, ...(await getHeroVideo()) });
+  useEffect(() => { load(); }, []);
+
+  const act = async (fn, okMsg) => {
+    setBusy(true);
+    try {
+      await fn();
+      await load();
+      toast.success(okMsg);
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const upload = (file) => {
+    if (!file) return;
+    if (!file.type.startsWith("video/")) {
+      toast.error("Choose a video file (MP4 works best)");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Video must be under 10MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () =>
+      act(async () => {
+        const res = await fetch(`${API}/admin/hero-video`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ video: reader.result }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(formatApiError(data.detail));
+      }, "Hero video updated — it's live on the homepage");
+    reader.readAsDataURL(file);
+  };
+
+  const remove = () =>
+    act(async () => {
+      const res = await fetch(`${API}/admin/hero-video`, { method: "DELETE", credentials: "include" });
+      if (!res.ok) throw new Error("Could not remove the video");
+    }, "Video removed — the homepage hero is now text only");
+
+  const restore = () =>
+    act(async () => {
+      const res = await fetch(`${API}/admin/hero-video/restore`, { method: "POST", credentials: "include" });
+      if (!res.ok) throw new Error("Could not restore the default video");
+    }, "Default video restored");
+
+  const status = state.hidden ? "Removed" : state.video ? "Custom video" : "Default video";
+
+  return (
+    <div className="mt-5 rounded-2xl border border-ink/10 bg-white p-5" data-testid="hero-video-panel">
+      <p className="flex items-center gap-2 text-sm font-bold text-ink"><Film size={16} className="text-brand" /> Homepage hero video</p>
+      <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
+        This video shows at the top of the homepage. It plays once when a visitor scrolls to it, then holds its final frame — no looping. MP4 under 10MB works best.
+      </p>
+      <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="w-full max-w-xs overflow-hidden rounded-xl bg-paper">
+          {state.loading ? (
+            <div className="aspect-[840/568]" />
+          ) : state.hidden ? (
+            <div className="flex aspect-[840/568] items-center justify-center text-xs font-semibold uppercase tracking-widest text-mute">No video</div>
+          ) : (
+            <video src={state.video || "/assets/hero-duo.mp4"} muted playsInline preload="metadata" className="w-full object-contain" data-testid="hero-video-preview" />
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <span className="inline-flex w-fit rounded-full bg-brand-subtle px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-brand" data-testid="hero-video-status">{status}</span>
+          <label data-testid="hero-video-upload" className="cursor-pointer rounded-full bg-ink px-4 py-2.5 text-center text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand">
+            {busy ? "Working…" : state.video ? "Replace video" : "Upload video"}
+            <input type="file" accept="video/*" className="hidden" onChange={(e) => { upload(e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+          {!state.hidden && (
+            <button data-testid="hero-video-remove" onClick={remove} disabled={busy} className="rounded-full border border-red-200 px-4 py-2.5 text-xs font-semibold text-red-500 transition-colors duration-200 hover:bg-red-50">
+              Remove video
+            </button>
+          )}
+          {(state.hidden || state.video) && (
+            <button data-testid="hero-video-restore" onClick={restore} disabled={busy} className="rounded-full border border-ink/15 px-4 py-2.5 text-xs font-semibold text-ink/70 transition-colors duration-200 hover:border-brand hover:text-brand">
+              Restore default
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function CataloguePanel() {
   const cat = useCatalogue();
   const [busy, setBusy] = useState("");
@@ -842,6 +939,8 @@ export function CataloguePanel() {
           Upload a new photo for any item — it's auto-cropped square on a clean white stage and goes live immediately. Remove hides an item from the shop (restore anytime below), and use "Add item" for brand-new products or accessories.
         </p>
       </div>
+
+      <HeroVideoPanel />
 
       <div className="mt-5 rounded-2xl border border-ink/10 bg-white p-5">
         <button data-testid="catalogue-add-toggle" onClick={() => setShowAdd(!showAdd)} className="flex items-center gap-2 text-sm font-bold text-ink transition-colors hover:text-brand">

@@ -104,3 +104,7 @@ class CatalogueItemIn(BaseModel):
 
 class SlotIn(BaseModel):
     slot: str
+
+
+class HeroVideoIn(BaseModel):
+    video: str

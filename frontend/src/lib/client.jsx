@@ -99,6 +99,17 @@ export function useCatalogueImages() {
   return useCatalogue().images;
 }
 
+// Homepage hero video (admin-managed): { video: dataURL|null, hidden: bool } — null video = default asset
+export const getHeroVideo = async () => {
+  try {
+    const res = await fetch(`${API}/hero-video`);
+    if (res.ok) return await res.json();
+  } catch {
+    /* fall through to default */
+  }
+  return { video: null, hidden: false };
+};
+
 // Shop lists: static data.js items minus admin-hidden, plus admin-added customs
 export function useShopItems() {
   const cat = useCatalogue();
