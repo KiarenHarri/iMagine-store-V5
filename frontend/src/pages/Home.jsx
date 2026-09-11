@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Wrench, BadgeCheck, MapPin, RotateCcw } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Wrench, MapPin, RotateCcw } from "lucide-react";
 import { ease, Marquee, MaskedLine, Reveal, SaleStrip } from "../components/Shared";
 import { getHeroVideo } from "../lib/client";
 import { categories, chapters, IMAGES, MARQUEE_ITEMS, BRAND } from "../lib/data";
@@ -141,25 +141,6 @@ function Hero() {
               className="relative"
             >
               <HeroVideo />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 0.9, ease }}
-              className="absolute -left-4 bottom-32 rounded-2xl border border-white/40 bg-white/70 px-5 py-4 shadow-xl backdrop-blur-xl sm:-left-8"
-            >
-              <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-mute">Now quoting</p>
-              <p className="mt-1 font-display text-sm font-bold text-ink">iPhone, Mac, iPad &amp; Watch</p>
-              <p className="mt-0.5 text-xs text-brand font-semibold">Price on request</p>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.9, delay: 1.05, ease }}
-              className="absolute -right-3 top-8 flex items-center gap-2 rounded-full border border-white/40 bg-white/70 px-4 py-2.5 shadow-lg backdrop-blur-xl sm:-right-6"
-            >
-              <BadgeCheck size={15} className="text-brand" />
-              <span className="text-xs font-semibold text-ink">Apple Reseller</span>
             </motion.div>
           </motion.div>
         </div>
