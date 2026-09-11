@@ -920,6 +920,33 @@ export function CataloguePanel() {
     );
   };
 
+  const renderCategory = (c) => {
+    const slot = `category:${c.slug}`;
+    const hasCustomImage = Boolean(cat.images[slot]);
+    return (
+      <div key={slot} data-testid={`catalogue-item-cat-${c.slug}`} className="rounded-2xl border border-black/5 bg-white p-4">
+        <div className="relative overflow-hidden rounded-xl bg-paper">
+          <img src={cat.images[slot] || c.image} alt={c.name} data-testid={`catalogue-img-cat-${c.slug}`} className="aspect-square w-full object-contain p-3" />
+          {hasCustomImage && (
+            <span className="absolute left-2 top-2 rounded-full bg-brand px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Custom</span>
+          )}
+        </div>
+        <p className="mt-3 truncate text-sm font-semibold text-ink">{c.name}</p>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <label data-testid={`catalogue-replace-cat-${c.slug}`} className="flex-1 cursor-pointer rounded-full bg-ink px-3 py-2 text-center text-xs font-semibold text-white transition-colors duration-200 hover:bg-brand">
+            {busy === slot ? "Working…" : hasCustomImage ? "Replace" : "Upload"}
+            <input type="file" accept="image/*" className="hidden" onChange={(e) => { upload(slot, e.target.files?.[0]); e.target.value = ""; }} />
+          </label>
+          {hasCustomImage && (
+            <button data-testid={`catalogue-reset-cat-${c.slug}`} onClick={() => reset(slot)} disabled={busy === slot} className="rounded-full border border-ink/15 px-3 py-2 text-xs font-semibold text-ink/70 transition-colors duration-200 hover:border-brand hover:text-brand">
+              Reset
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const customProducts = cat.items.filter((i) => i.kind === "product").map((i) => ({ id: i.slot.replace("product:", ""), name: i.name, image: i.image }));
   const customAccessories = cat.items.filter((i) => i.kind === "accessory").map((i) => ({ id: i.slot.replace("accessory:", ""), name: i.name, image: i.image }));
   const hiddenItems = cat.hidden.map((slot) => {
@@ -936,7 +963,7 @@ export function CataloguePanel() {
       <div className="rounded-2xl border border-brand/20 bg-brand-subtle p-5">
         <p className="flex items-center gap-2 text-sm font-bold text-ink"><ImagePlus size={16} className="text-brand" /> Catalogue photos &amp; items</p>
         <p className="mt-1.5 text-sm leading-relaxed text-ink/65">
-          Upload a new photo for any item — it's auto-cropped square on a clean white stage and goes live immediately. Remove hides an item from the shop (restore anytime below), and use "Add item" for brand-new products or accessories.
+          Upload a new photo for any item — it's auto-cropped square on a clean white stage and goes live immediately. Remove hides an item from the shop (restore anytime below), use "Add item" for brand-new products or accessories, and the homepage "Shop by device" card photos are editable further down.
         </p>
       </div>
 
@@ -983,6 +1010,14 @@ export function CataloguePanel() {
             </button>
           </form>
         )}
+      </div>
+
+      <div className="mt-8">
+        <h3 className="font-display text-lg font-bold text-ink">Homepage — Shop by device cards</h3>
+        <p className="mt-1 text-xs leading-relaxed text-ink/60">These five photos appear in the "Shop by device" strip on the homepage and at the top of each category page.</p>
+        <div className="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-5">
+          {categories.map((c) => renderCategory(c))}
+        </div>
       </div>
 
       <div className="mt-8">

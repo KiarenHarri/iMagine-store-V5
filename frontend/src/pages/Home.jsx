@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ArrowUpRight, Wrench, MapPin, RotateCcw } from "lucide-react";
 import { ease, Marquee, MaskedLine, Reveal, SaleStrip } from "../components/Shared";
-import { getHeroVideo } from "../lib/client";
+import { getHeroVideo, useCatalogueImages } from "../lib/client";
 import { categories, chapters, IMAGES, MARQUEE_ITEMS, BRAND } from "../lib/data";
 
 // Hero video: plays ONCE when scrolled into view, then holds its final frame (no loop). Admin-managed.
@@ -150,6 +150,7 @@ function Hero() {
 }
 
 function CategoryRail() {
+  const catImgs = useCatalogueImages();
   return (
     <section data-testid="category-rail" className="bg-white py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-8 lg:px-12">
@@ -173,7 +174,7 @@ function CategoryRail() {
                 className="group relative block overflow-hidden rounded-3xl bg-paper"
               >
                 <div className="overflow-hidden">
-                  <img src={c.image} alt={c.name} loading="lazy" className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
+                  <img src={catImgs[`category:${c.slug}`] || c.image} alt={c.name} loading="lazy" className="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-5">

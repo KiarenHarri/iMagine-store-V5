@@ -99,11 +99,11 @@ export const MARQUEE_ITEMS = [
 ];
 
 export const categories = [
-  { slug: "iphone", name: "iPhone", tagline: "Pro cameras. ProMotion. Pure power.", image: APPLE_IMG.ip17pro },
-  { slug: "mac", name: "Mac", tagline: "Apple silicon. Silent speed.", image: APPLE_IMG.mbair },
-  { slug: "ipad", name: "iPad", tagline: "A canvas that goes anywhere.", image: APPLE_IMG.ipad11 },
-  { slug: "watch", name: "Watch", tagline: "Health, fitness and focus on your wrist.", image: APPLE_IMG.watch },
-  { slug: "accessories", name: "Accessories", tagline: "Finish the ecosystem.", image: APPLE_IMG.airpodspro },
+  { slug: "iphone", name: "iPhone", tagline: "Pro cameras. ProMotion. Pure power.", image: "/assets/iphone-18-pro-max.webp" },
+  { slug: "mac", name: "Mac", tagline: "Apple silicon. Silent speed.", image: APPLE_IMG.mbpro },
+  { slug: "ipad", name: "iPad", tagline: "A canvas that goes anywhere.", image: APPLE_IMG.ipadpro },
+  { slug: "watch", name: "Watch", tagline: "Health, fitness and focus on your wrist.", image: "/assets/watch-ultra-4.webp" },
+  { slug: "accessories", name: "Accessories", tagline: "Finish the ecosystem.", image: "/assets/airpods-5.webp" },
 ];
 
 export const products = [
@@ -127,13 +127,13 @@ export const products = [
   { id: "ipd", name: "iPad", category: "ipad", tagline: "Lovable. Capable. Everyday essential.", image: APPLE_IMG.ipad11, specs: ["A16 chip", "11-inch display", "USB-C"] },
   { id: "ipm", name: "iPad mini", category: "ipad", tagline: "Full iPad, pocket size.", image: APPLE_IMG.ipadmini, specs: ["A17 Pro chip", "8.3-inch display", "Apple Pencil support"] },
   { id: "aws11", name: "Apple Watch Series 11", category: "watch", tagline: "Health, redefined daily.", image: APPLE_IMG.watch, specs: ["Readiness insights", "Advanced health sensors", "watchOS"] },
-  { id: "awu3", name: "Apple Watch Ultra 3", category: "watch", tagline: "Built for the extremes.", image: APPLE_IMG.watch, specs: ["Titanium case", "Multi-day battery", "Precision GPS"] },
+  { id: "awu4", name: "Apple Watch Ultra 4", category: "watch", tagline: "Built for the extremes.", image: "/assets/watch-ultra-4.webp", specs: ["S11 chip", "Up to 50-hour battery", "Natural & black titanium"] },
   { id: "awse", name: "Apple Watch SE", category: "watch", tagline: "Essentials, beautifully done.", image: APPLE_IMG.watchse, specs: ["Retina display", "Sleep tracking", "Family Setup"] },
 ];
 
 export const accessories = [
   { id: "app2", name: "AirPods Pro 3", tagline: "The world's best in-ear noise cancellation.", image: APPLE_IMG.airpodsprocase, group: "Audio" },
-  { id: "ap", name: "AirPods", tagline: "Effortless listening, all day.", image: APPLE_IMG.airpods, group: "Audio" },
+  { id: "ap", name: "AirPods 5", tagline: "Open-ear noise cancellation, reimagined.", image: "/assets/airpods-5.webp", group: "Audio" },
   { id: "airpodsmax", name: "AirPods Max", tagline: "Over-ear, re-engineered sound.", image: APPLE_IMG.airpodsmax, group: "Audio" },
   { id: "pencil", name: "Apple Pencil Pro", tagline: "Pixel-perfect precision.", image: APPLE_IMG.pencil, group: "iPad" },
   { id: "mk", name: "Magic Keyboard", tagline: "A floating cantilever design.", image: APPLE_IMG.keyboard, group: "iPad" },

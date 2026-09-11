@@ -3,11 +3,12 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Marquee, MaskedLine, ProductCard, Reveal } from "../components/Shared";
 import { categories } from "../lib/data";
-import { useShopItems } from "../lib/client";
+import { useShopItems, useCatalogueImages } from "../lib/client";
 
 export default function Category() {
   const { slug } = useParams();
   const { products } = useShopItems();
+  const catImgs = useCatalogueImages();
   const category = categories.find((c) => c.slug === slug && c.slug !== "accessories");
   if (!category) return <Navigate to="/shop" replace />;
 
@@ -44,7 +45,7 @@ export default function Category() {
           </div>
           <Reveal delay={0.2}>
             <div className="overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl shadow-black/50">
-              <img src={category.image} alt={`${category.name} hero`} data-testid="category-hero-image" className="aspect-[4/3] w-full object-cover" />
+              <img src={catImgs[`category:${category.slug}`] || category.image} alt={`${category.name} hero`} data-testid="category-hero-image" className="aspect-[4/3] w-full object-cover" />
             </div>
           </Reveal>
         </div>
