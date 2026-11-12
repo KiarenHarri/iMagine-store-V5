@@ -94,7 +94,7 @@ async def send_email(*, to: str, subject: str, html: str, reply_to: str | None =
     _assert_safe_email(subject, html)
     if not RESEND_API_KEY or not EMAIL_FROM:
         raise RuntimeError("Email is not configured — set RESEND_API_KEY and EMAIL_FROM in the environment")
-    payload = {"from": EMAIL_FROM, "to": [to], "subject": subject, "html": html}
+    payload = {"from": EMAIL_FROM, "to": [t.strip() for t in to.split(",") if t.strip()], "subject": subject, "html": html}
     if reply_to or EMAIL_REPLY_TO:
         payload["reply_to"] = reply_to or EMAIL_REPLY_TO
     try:
